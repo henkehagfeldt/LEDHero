@@ -4,6 +4,7 @@ import time
 import pygame
 import led_tools as lt
 import mappings
+import guitarsounds as sounds
 import evdev
 
 guitar = evdev.InputDevice('/dev/input/event0')
