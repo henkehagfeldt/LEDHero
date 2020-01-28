@@ -32,14 +32,31 @@ def get_tone(tone, octave):
 
     return r_tone*octave
 
+sample_rate = 44100
+
+'''
 def play_for(sample_wave, ms):
     """Play the given NumPy array, as a sound, for ms milliseconds."""
     sound = pygame.sndarray.make_sound(sample_wave)
     sound.play(-1)
     pygame.time.delay(ms)
     sound.stop()
+'''
 
-sample_rate = 44100
+def play_tone(tone, oct):
+    tone = get_tone(tone, oct)
+    sample_wave = sine_wave(tone, 4096, 1000)
+    """Play the given NumPy array, as a sound, for ms milliseconds."""
+    sound = pygame.sndarray.make_sound(sample_wave)
+    sound.play(-1)
+    return sound
+    
+def stop_tone(sound):
+    try:
+        sound.stop()
+    except Exception as e:
+        print("Sound can't be stopped.")
+        print(e) 
 
 def sine_wave(hz, peak, n_samples=sample_rate):
     """Compute N samples of a sine wave with given frequency and peak amplitude.

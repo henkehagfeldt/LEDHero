@@ -1,20 +1,21 @@
 import Adafruit_WS2801 as ws
+from random import randint 
 
 dark = 0.4
 WS_GREEN = ws.RGB_to_color(0, 0, 255)
 WS_DGREEN = ws.RGB_to_color(0, 0, int(255*dark))
 WS_RED = ws.RGB_to_color(255, 0, 0)
-WS_RED = ws.RGB_to_color(int(255*dark), 0, 0)
+WS_DRED = ws.RGB_to_color(int(255*dark), 0, 0)
 WS_YELLOW = ws.RGB_to_color(255, 0, 255)
-WS_YELLOW = ws.RGB_to_color(int(255*dark), 0, int(255*dark))
+WS_DYELLOW = ws.RGB_to_color(int(255*dark), 0, int(255*dark))
 WS_BLUE = ws.RGB_to_color(0, 255, 0)
-WS_BLUE = ws.RGB_to_color(0, int(255*dark), 0)
+WS_DBLUE = ws.RGB_to_color(0, int(255*dark), 0)
 WS_ORANGE = ws.RGB_to_color(255, 0, 60)
-WS_ORANGE = ws.RGB_to_color(int(255*dark), 0, int(60*dark))
+WS_DORANGE = ws.RGB_to_color(int(255*dark), 0, int(60*dark))
 WS_CLEAR = ws.RGB_to_color(0, 0, 0)
 
-PXL_CNT = 40
-PXL_COL_CNT = 8
+PXL_CNT = 50
+PXL_COL_CNT = 10
 
 PXL_CLK = 18
 PXL_DOUT  = 23
@@ -72,8 +73,13 @@ def set_pixel((x, y)):
     set_pixel_clr(led_matrix[x][y], get_col_color(x, False))
 
 def set_pixel_clr((x, y), color):
-    pixels.set_pixel(led_matrix[x][y], get_col_color(x, False))
+    if color == "rainbow":
+        color = ws.RGB_to_color(randint(0,255), randint(0,255), randint(0,255))
+    pixels.set_pixel(led_matrix[x][y], color)
     pixels.show()
 
-def button_pixel(x):
+def button_pixel_on(x):
     set_pixel_clr((x, PXL_COL_CNT-1), get_col_color(x, button=True))
+
+def button_pixel_off(x):
+    set_pixel_clr((x, PXL_COL_CNT-1), WS_CLEAR)
