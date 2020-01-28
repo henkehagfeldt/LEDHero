@@ -35,8 +35,8 @@ PUSHED_KEYS = {}
 
 PLAYING_SOUNDS = {}
 
-current_map = mappings.get_map('hero')
-current_steps = 0
+map_selected = mappings.get_map('hero')
+map_steps = 0
 game_slowness = 200
 ticks = 0
 
@@ -49,7 +49,7 @@ while True:
         for y in range(0, lt.PXL_COL_CNT):
             # First row, draw new pixels
             if x == 0:
-                if current_map[x, y + current_steps] > 0:
+                if map_selected[x, y + map_steps] > 0:
                     lt.set_pixel((x, y))
             else:
                 lt.drop_pixel((x, y))
@@ -94,8 +94,8 @@ while True:
 
     # Move the map a step, or finish if it's done
     if ticks >= game_slowness:
-        if current_steps < len(current_map[0]):
-            current_steps += 1
+        if map_steps < len(map_selected[0]):
+            map_steps += 1
         else
             # Map finished
             return
@@ -107,18 +107,17 @@ def print_keys():
     except Exception as e:
         print(e)
 
-    print("Keys: \n")
+    print("Color keys: \n")
     print("Green: " + str(COLOR_KEYS[KEY_GREEN]))
     print("Red: " + str(COLOR_KEYS[KEY_RED]))
     print("Yellow: " + str(COLOR_KEYS[KEY_YELLOW]))
     print("Blue: " + str(COLOR_KEYS[KEY_BLUE]))
     print("Orange: " + str(COLOR_KEYS[KEY_ORANGE]))
-    
+
     print("All pushed keys:")
     print(keys)
 
     
-
 def key_to_x(key):
     if key == KEY_GREEN:
         return 0
@@ -130,7 +129,7 @@ def key_to_x(key):
         return 3
     elif key == KEY_ORANGE:
         return 4
-    else:
-        return -1
+
+    return -1
 
 
