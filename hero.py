@@ -29,11 +29,57 @@ COLOR_KEYS = {
     str(KEY_YELLOW): False,
     str(KEY_BLUE): False,
     str(KEY_ORANGE): False
-    }
+}
+
+VALID_KEYS = {KEY_STRUM, KEY_GREEN, KEY_RED, KEY_YELLOW, KEY_BLUE, KEY_ORANGE}
+KEY_TONES = {
+    '00000': 'a',
+    '00001': 'a',
+    '00010': 'a',
+    '00011': 'a',
+
+    '00100': 'a',
+    '00101': 'a',
+    '00110': 'a',
+    '00111': 'a',
+
+    '01000': 'a',
+    '01001': 'a',
+    '01010': 'a',
+    '01011': 'a',
+
+    '01100': 'a',
+    '01101': 'a',
+    '01110': 'a',
+    '01111': 'a',
+
+    '10000': 'a',
+    '10001': 'a',
+    '10010': 'a',
+    '10011': 'a',
+    
+    '10100': 'a',
+    '10101': 'a',
+    '10110': 'a',
+    '10111': 'a',
+
+    '11000': 'a',
+    '11001': 'a',
+    '11010': 'a',
+    '11011': 'a',
+
+    '11100': 'a',
+    '11101': 'a',
+    '11110': 'a',
+    '11111': 'a'
+}
+strum_state = 0
+
 # Currently pushed keys
 PUSHED_KEYS = {}
 
 PLAYING_SOUNDS = {}
+current_sound = None
 
 map_selected = mappings.get_map('hero')
 map_steps = 0
@@ -63,8 +109,8 @@ while True:
 
     # Register new keys
     TEMP_KEYS = {}
-    for(k in range(0, len(KEYS))):
-        if KEYS[k] in keys:
+    for(k in range(0, len(keys))):
+        if keys[k] in VALID_KEYS:
             TEMP_KEYS[k] = True
     
     # Check which keys are no longer held
@@ -74,6 +120,9 @@ while True:
             if(str(k) in COLOR_KEYS):
                 COLOR_KEYS[str(k)] = False
                 lt.button_pixel_off(key_to_x(k))
+            
+            if(k == KEY_STRUM):
+                strum_state = 0
     
     # Check which keys that are triggered this cycle
     for(k in TEMP_KEYS):
@@ -82,14 +131,28 @@ while True:
             if(str(k) in COLOR_KEYS):
                 COLOR_KEYS[str(k)] = True
                 lt.button_pixel_on(key_to_x(k))
+            
+            # Check strumbar
+            if(k == KEY_STRUM):
+                # New strum from neutral
+                if strum_state == 0:
+                    strum_state = 1
+                # Still strumming from last cycle
+                elif strum_state == 1:
+                    strum_state = 2
 
-
+    
     #sounds.stop_tone(PLAYING_SOUNDS[k])
     
-    # Play Sounds
+    # Play Sounds on new strum
+    if(strum_state == 1):
+        current_sound = play_tones(COLOR_KEYS)
+
+
     #s = sounds.play_tone('a#', oct=4)
     #sounds.stop_tone(s)
     
+    PUSHED_KEYS = TEMP_KEYS
     ticks += 1
 
     # Move the map a step, or finish if it's done
@@ -100,6 +163,22 @@ while True:
             # Map finished
             return
         ticks = 0
+
+def play_tones(color_keys):
+    return sounds.play_tone(keys_to_tones(color_keys), oct=4)
+
+def stop_tones(sound):
+    sounds.stop_tone(sound)
+
+def keys_to_tones(keys):
+    binary_keys = ""
+    binary_keys += str(int(COLOR_KEYS[str(KEY_GREEN)])) 
+    binary_keys += str(int(COLOR_KEYS[str(KEY_RED)])) 
+    binary_keys += str(int(COLOR_KEYS[str(KEY_YELLOW)])) 
+    binary_keys += str(int(COLOR_KEYS[str(KEY_BLUE)])) 
+    binary_keys += str(int(COLOR_KEYS[str(KEY_ORANGE)])) 
+    
+    return KEY_TONES[binary_keys]
 
 def print_keys():
     try:
@@ -131,5 +210,3 @@ def key_to_x(key):
         return 4
 
     return -1
-
-
