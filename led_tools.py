@@ -1,4 +1,6 @@
 import Adafruit_WS2801 as ws
+import Adafruit_GPIO.SPI as SPI
+import RPi.GPIO as GPIO
 from random import randint 
 
 dark = 0.4
@@ -17,15 +19,20 @@ WS_CLEAR = ws.RGB_to_color(0, 0, 0)
 PXL_CNT = 50
 PXL_COL_CNT = 10
 
-PXL_CLK = 18
-PXL_DOUT  = 23
-pixels = ws.WS2801Pixels(PXL_CNT, clk=PXL_CLK, do=PXL_DOUT)
+#PXL_CLK = 18
+#PXL_DOUT  = 23
+#pixels = ws.WS2801Pixels(PXL_CNT, clk=PXL_CLK, do=PXL_DOUT)
+SPI_PORT = 0
+SPI_DEVICE = 0
+pixels = ws.WS2801Pixels(PXL_CNT, spi=SPI.SpiDev(SPI_PORT, SPI_DEVICE), gpio=GPIO)
+
+
 
 led_matrix = []
 
 def init_matrix():
     direction = 1
-    for x in range(0, PXL_CNT/PXL_COL_CNT):
+    for x in range(0, int(PXL_CNT/PXL_COL_CNT)):
             led_matrix.append([])
             for y in range(0, PXL_COL_CNT):
                 if direction == 1:
@@ -33,10 +40,12 @@ def init_matrix():
                 else:
                     led_matrix[x].append(PXL_COL_CNT * x + PXL_COL_CNT - (y + 1))
             direction = direction * -1
+    pixels.clear()
+    pixels.show()
 
 def get_col_color(x, button):
     color = WS_CLEAR
-    if button = False:
+    if button == False:
         if x == 0:
             color = WS_GREEN
         elif x == 1:
@@ -60,19 +69,20 @@ def get_col_color(x, button):
             color = WS_DORANGE
     return color
 
-def move_pixel((new_x, new_y), (old_x, old_y)):        
-    pixels.set_pixel(led_matrix[old_x][old_y], WS_CLEAR)
+def move_pixel(new_x, new_y, old_x, old_y):  
+    if old_x >= 0 and old_y >= 0:      
+        pixels.set_pixel(led_matrix[old_x][old_y], WS_CLEAR)
     if new_y >= 0: 
         pixels.set_pixel(led_matrix[new_x][new_y], get_col_color(new_x, False))
     pixels.show()
 
-def drop_pixel((x, y)):
-    move_pixel((x, y-1), (x, y))
+def drop_pixel(x, y):
+    move_pixel(x, y-1, x, y)
 
-def set_pixel((x, y)):
-    set_pixel_clr(led_matrix[x][y], get_col_color(x, False))
+def set_pixel(x, y):
+    set_pixel_clr(x, y, get_col_color(x, False))
 
-def set_pixel_clr((x, y), color):
+def set_pixel_clr(x, y, color):
     if color == "rainbow":
         color = ws.RGB_to_color(randint(0,255), randint(0,255), randint(0,255))
     pixels.set_pixel(led_matrix[x][y], color)
