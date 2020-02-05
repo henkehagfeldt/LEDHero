@@ -80,6 +80,7 @@ current_sound = None
 
 map_selected = mappings.get_map('hero')
 map_steps = 0
+map_update = True
 game_slowness = 50
 ticks = 0
 
@@ -132,27 +133,23 @@ def key_to_x(key):
 
     return -1
 
-y = 9
-# Main Game Loop
-while True:
+def smart_led_update():
+    print("I'm Better, hopefully")
 
-    
+def stupid_led_update():
     # Update LED-Matrix
     for x in range(0, 5):
         for y in range(0, 10):
             # First row, draw new pixels
             if map_selected[y + map_steps][x] > 0:
                 lt.drop_pixel(x, y)
-                #print("Dropping pixel")
-            '''
-            if y == 9:
-                if map_selected[y + map_steps][x] > 0:
-                    lt.set_pixel(x, y)
-                    print("Setting pixel")
-            elif map_selected[y + map_steps][x] > 0:
-                lt.drop_pixel(x, y)
-            '''
-                
+    map_update = False
+
+# Main Game Loop
+while True:
+
+    if map_update == True:
+        stupid_led_update()
     
     # Check Input
     keys = guitar.active_keys()
@@ -214,6 +211,7 @@ while True:
     if ticks >= game_slowness:
         if (map_steps + 10) < len(map_selected):
             map_steps += 1
+            map_update = True
         else:
             # Map finished
             break
