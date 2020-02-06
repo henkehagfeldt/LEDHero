@@ -47,17 +47,6 @@ def get_col_color(x, button):
     color = WS_CLEAR
     if button == False:
         if x == 0:
-            color = WS_GREEN
-        elif x == 1:
-            color = WS_RED
-        elif x == 2:
-            color = WS_YELLOW
-        elif x == 3:
-            color = WS_BLUE
-        elif x == 4:
-            color = WS_ORANGE
-    else:
-        if x == 0:
             color = WS_DGREEN
         elif x == 1:
             color = WS_DRED
@@ -67,6 +56,17 @@ def get_col_color(x, button):
             color = WS_DBLUE
         elif x == 4:
             color = WS_DORANGE
+    else:
+        if x == 0:
+            color = WS_GREEN
+        elif x == 1:
+            color = WS_RED
+        elif x == 2:
+            color = WS_YELLOW
+        elif x == 3:
+            color = WS_BLUE
+        elif x == 4:
+            color = WS_ORANGE
     return color
 
 def move_pixel(new_x, new_y, old_x, old_y):  
@@ -74,10 +74,10 @@ def move_pixel(new_x, new_y, old_x, old_y):
         pixels.set_pixel(led_matrix[old_x][old_y], WS_CLEAR)
     if new_y >= 0: 
         pixels.set_pixel(led_matrix[new_x][new_y], get_col_color(new_x, False))
-    pixels.show()
+    #pixels.show()
 
 def drop_pixel(x, y):
-    move_pixel(x, y-1, x, y)
+    move_pixel(x, y-1, x, y, btn)
 
 def set_pixel(x, y):
     set_pixel_clr(x, y, get_col_color(x, False))
@@ -86,10 +86,13 @@ def set_pixel_clr(x, y, color):
     if color == "rainbow":
         color = ws.RGB_to_color(randint(0,255), randint(0,255), randint(0,255))
     pixels.set_pixel(led_matrix[x][y], color)
-    pixels.show()
+    #pixels.show()
 
 def button_pixel_on(x):
-    set_pixel_clr((x, PXL_COL_CNT-1), get_col_color(x, button=True))
+    set_pixel_clr(x, 1, get_col_color(x, button=True))
 
 def button_pixel_off(x):
-    set_pixel_clr((x, PXL_COL_CNT-1), WS_CLEAR)
+    set_pixel_clr(x, 1, WS_CLEAR)
+
+def write_leds():
+    pixels.show()
