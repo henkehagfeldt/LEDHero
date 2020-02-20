@@ -4,13 +4,12 @@ import time
 import pygame
 import led_tools as lt
 import mappings
-#import guitarsounds as sounds
+import guitarsounds_scipy as sounds
 from evdev import *
 import subprocess
 import asyncio
 import threading
 
-pygame.init()
 #guitar = InputDevice('/dev/input/event0')
 lt.init_matrix()
 
@@ -79,6 +78,7 @@ game_slowness = 3
 ticks = 0
 
 class state(object):
+    current_sound = None
     keys = []
     strum_state = 0
     COLOR_KEYS = {
@@ -90,13 +90,13 @@ class state(object):
     }
     valid_colors = [KEY_GREEN, KEY_RED, KEY_YELLOW, KEY_BLUE, KEY_ORANGE]
 
-'''
+
 def play_tones(color_keys):
-    return sounds.play_tone(keys_to_tones(color_keys), oct=4)
+    return sounds.play_tone(keys_to_tones(color_keys), oct=12)
 
 def stop_tones(sound):
     sounds.stop_tone(sound)
-'''
+
 def keys_to_tones(keys):
     binary_keys = ""
     binary_keys += str(int(state.COLOR_KEYS[str(KEY_GREEN)])) 
@@ -124,7 +124,7 @@ def print_keys():
     print(state.keys)
 
 def set_button_leds():
-    for (k, v) in state.COLOR_KEYS:
+    for (k, v) in state.COLOR_KEYS.items():
         if v:
             lt.button_pixel_on(key_to_x(k))
         else:
@@ -212,6 +212,7 @@ class guitarThread(threading.Thread):
                         # New strum from neutral
                         if state.strum_state == 0:
                             state.strum_state = 1
+                            state.current_sound = play_tones(state.COLOR_KEYS)
                         # Still strumming from last cycle
                         elif state.strum_state == 1:
                             state.strum_state = 2
@@ -222,6 +223,8 @@ class guitarThread(threading.Thread):
                         lt.button_pixel_off(key_to_x(event.code))
                     elif event.code == KEY_STRUM:
                         state.strum_state = 0
+                        if state.current_sound != None:
+                            stop_tones(state.current_sound)
 
         '''
         async def key_logger(dev):

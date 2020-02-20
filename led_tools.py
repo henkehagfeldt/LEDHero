@@ -77,7 +77,7 @@ def move_pixel(new_x, new_y, old_x, old_y):
     #pixels.show()
 
 def drop_pixel(x, y):
-    move_pixel(x, y-1, x, y, btn)
+    move_pixel(x, y-1, x, y)
 
 def set_pixel(x, y):
     set_pixel_clr(x, y, get_col_color(x, False))
