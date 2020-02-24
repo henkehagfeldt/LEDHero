@@ -4,6 +4,22 @@ import os
 
 pygame.mixer.init(44100, -16, 1, 1024)
 #pygame.mixer.init()
+midi_tones = {}
+init_tones()
+
+def init_tones():
+    midi_tones['a'] = pygame.mixer.sound('midi/A3.wav')
+    midi_tones['a#'] = pygame.mixer.sound('midi/A3#_B3b.wav')
+    midi_tones['b'] = pygame.mixer.sound('midi/B3.wav')
+    midi_tones['c'] = pygame.mixer.sound('midi/C3.wav')
+    midi_tones['c#'] = pygame.mixer.sound('midi/C3#_D3b.wav')
+    midi_tones['d'] = pygame.mixer.sound('midi/D3.wav')
+    midi_tones['d#'] = pygame.mixer.sound('midi/D3#_E3b.wav')
+    midi_tones['e'] = pygame.mixer.sound('midi/E3.wav')
+    midi_tones['f'] = pygame.mixer.sound('midi/F3.wav')
+    midi_tones['f#'] = pygame.mixer.sound('midi/F3#_G3b.wav')
+    midi_tones['g'] = pygame.mixer.sound('midi/G3.wav')
+    midi_tones['g#'] = pygame.mixer.sound('midi/G3#_A3b.wav')
 
 def get_tone(tone, octave):
     r_tone = 0
@@ -32,7 +48,6 @@ def get_tone(tone, octave):
         r_tone = 24.50
     elif tone == 'g#':
         r_tone = 25.96
-    '''
     if tone == 'a':
         r_tone = 440
     elif tone == 'a#':
@@ -57,10 +72,8 @@ def get_tone(tone, octave):
         r_tone = 392
     elif tone == 'g#':
         r_tone = 415
-
+    '''
     return r_tone
-
-sample_rate = 44100
 
 
 '''
@@ -72,6 +85,11 @@ def play_for(sample_wave, ms):
     sound.stop()
 '''
 
+def play_tone(tone):
+    if tone in midi_tones:
+        midi_tones[tone].play(-1)
+
+
 def play_tone(tone, oct):
     tone = get_tone(tone, oct)
     sample_wave = sine_wave(tone, 2048, 100)
@@ -80,9 +98,9 @@ def play_tone(tone, oct):
     sound.play(-1)
     return sound
     
-def stop_tone(sound):
+def stop_tone(tone):
     try:
-        sound.stop()
+        midi_tones[tone].stop()
     except Exception as e:
         print("Sound can't be stopped.")
         print(e) 

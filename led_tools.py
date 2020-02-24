@@ -1,3 +1,5 @@
+# Update to new library
+# https://github.com/adafruit/Adafruit_CircuitPython_WS2801
 import Adafruit_WS2801 as ws
 import Adafruit_GPIO.SPI as SPI
 import RPi.GPIO as GPIO
@@ -25,8 +27,6 @@ PXL_COL_CNT = 10
 SPI_PORT = 0
 SPI_DEVICE = 0
 pixels = ws.WS2801Pixels(PXL_CNT, spi=SPI.SpiDev(SPI_PORT, SPI_DEVICE), gpio=GPIO)
-
-
 
 led_matrix = []
 
@@ -74,7 +74,6 @@ def move_pixel(new_x, new_y, old_x, old_y):
         pixels.set_pixel(led_matrix[old_x][old_y], WS_CLEAR)
     if new_y >= 0: 
         pixels.set_pixel(led_matrix[new_x][new_y], get_col_color(new_x, False))
-    #pixels.show()
 
 def drop_pixel(x, y):
     move_pixel(x, y-1, x, y)
@@ -86,7 +85,6 @@ def set_pixel_clr(x, y, color):
     if color == "rainbow":
         color = ws.RGB_to_color(randint(0,255), randint(0,255), randint(0,255))
     pixels.set_pixel(led_matrix[x][y], color)
-    #pixels.show()
 
 def button_pixel_on(x):
     set_pixel_clr(x, 1, get_col_color(x, button=True))

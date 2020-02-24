@@ -63,6 +63,7 @@ KEY_TONES = {
     '11110': 'a',
     '11111': 'a'
 }
+
 strum_state = 0
 
 # Currently pushed keys
