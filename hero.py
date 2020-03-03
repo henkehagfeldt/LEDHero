@@ -293,7 +293,7 @@ g_thread.start()
 
 millis = get_millis()
 led_millis = get_millis()
-led_time = 10
+led_time = 40
 game_time = 400
 diff_time = 20
 menu = True
