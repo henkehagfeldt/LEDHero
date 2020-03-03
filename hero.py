@@ -253,10 +253,10 @@ class guitarThread(threading.Thread):
                             elif KEY_RED == event.code:
                                 # Speed Down
                                 if state.speed < 700:
-                                    state.speed += 20
+                                    state.speed += 30
                             elif KEY_YELLOW == event.code:
-                                if state.speed > 200:
-                                    state.speed -= 20 
+                                if state.speed > 220:
+                                    state.speed -= 30 
                         elif state.done and KEY_GREEN == event.code:
                             state.done = False
                             state.menu = True
@@ -339,9 +339,11 @@ def change_preview(direction):
     state.map_selected = mappings.get_map(state.map_name)
     
 def show_score(score):
+    multiplier = (state.speed - 190) / 30
+    actual_score = state.score * multiplier
     for x in range(0, 5):
         # state.score = 123
-        s = state.score % (10**(x+1))
+        s = actual_score % (10**(x+1))
         # s = 3
         s = math.floor(s / (10**x))
 
