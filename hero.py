@@ -269,7 +269,7 @@ def preview_song_music(song):
 
     if not state.previewing == song:
         state.previewing = song
-        state.preview_step = 0
+        state.preview_step = 4
     
     if (state.preview_step + 11) < len(state.map_selected):
         state.preview_step += 1
