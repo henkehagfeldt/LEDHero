@@ -240,7 +240,7 @@ class guitarThread(threading.Thread):
 
                         # Choose song
                         if state.menu and KEY_GREEN == event.code:
-                            state.menu = False
+                            game_on()
 
 
                     # Strum
@@ -267,6 +267,15 @@ class guitarThread(threading.Thread):
                     elif event.code == KEY_STRUM:
                         state.strum_state = 0
  
+def game_on():
+
+    # Clear all LEDs
+    for x in range(0, 5):
+        for y in range(0, 10):
+            lt.set_pixel_clr(x, y, lt.WS_CLEAR)
+
+    # Disable menu mode
+    state.menu = False
 
 def get_millis():
     return int(round(time.time() * 1000))
