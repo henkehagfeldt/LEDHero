@@ -251,7 +251,7 @@ g_thread.daemon = True
 g_thread.start()
 
 millis = get_millis()
-game_time = 200
+game_time = 400
 
 # Main Game Loop
 while True:
