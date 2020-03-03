@@ -14,7 +14,7 @@ def get_map(x):
 
 def get_map_list():
     map_list = []
-    for k in maps.keys:
+    for k in maps.keys():
         map_list.append(k)
     return map_list
 
@@ -58,7 +58,7 @@ maps = {
             [0, 0, 0, 0, 0],
         ]
     },
-    
+
     'star': {
         'hitmap':
             [
