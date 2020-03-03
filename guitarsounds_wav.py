@@ -28,7 +28,6 @@ def init_tones():
 
 
 def play_tone(tone):
-    print("Play sound")
     if tone in midi_tones:
         midi_tones[tone].play(loops=-1, maxtime=1000,fade_ms=200)
         midi_tones[tone].fadeout(1600)

@@ -76,8 +76,9 @@ PUSHED_KEYS = {}
 
 PLAYING_SOUNDS = {}
 current_sound = None
-
-map_name = 'star'
+map_list = mappings.get_map_list()
+map_index = 0
+map_name = map_list[map_index]
 map_selected = mappings.get_map(map_name)
 map_steps = 0
 map_update = True
@@ -241,7 +242,11 @@ class guitarThread(threading.Thread):
                         if state.strum_state == 0:
                             state.strum_state = 1
                             if not menu:
+                                # Check for a hit if playing a song
                                 checkForHit()
+                            else:
+                                # Switch song preview if in menu
+                                changePreview(event.value)
 
                         # Still strumming from last cycle
                         elif state.strum_state == 1:
@@ -283,7 +288,14 @@ def preview_song_leds(song):
     for x in range(0,5):
         for y in range(0,10):
             lt.set_pixel_clr(x, y, MAP_COLORS[song])
-    
+
+def change_preview(direction):
+    if(direction == 1):
+        map_index = (map_index + 1) % len(map_list)
+    elif(direction == -1):
+        map_index = (map_index - 1) % len(map_list)
+    map_name = map_list[map_index]
+    map_selected = mappings.get_map(map_name)
     
 
 g_thread = guitarThread(1, "Thread-1")
