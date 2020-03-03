@@ -249,6 +249,9 @@ g_thread.daemon = True
 # Run the guitar-input thread
 g_thread.start()
 
+millis = time.time*1000
+game_time = 200
+
 # Main Game Loop
 while True:
 
@@ -321,7 +324,9 @@ while True:
     ticks += 1
 
     # Move the map a step, or finish if it's done
-    if ticks >= game_slowness:
+    if (time.time*1000 - millis) >= game_time:
+        millis = time.time*1000
+    #if ticks >= game_slowness:
         if (map_steps + 11) < len(map_selected):
             map_steps += 1
             map_update = True
