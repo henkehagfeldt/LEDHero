@@ -130,7 +130,11 @@ def set_button_leds():
         if v:
             lt.button_pixel_on(key_to_x(k))
             print("BUtton on")
+            print("KEYTOX")
             print(k)
+            print(KEY_GREEN)
+            print(k == KEY_GREEN)
+            time.sleep(5)
         else:
             lt.button_pixel_off(key_to_x(k))
 
@@ -149,11 +153,7 @@ def x_to_key(x):
         return -1
     
 def key_to_x(key):
-    print("KEYTOX")
-    print(key)
-    print(KEY_GREEN)
-    print(key == KEY_GREEN)
-    time.sleep(5)
+    
     if key == KEY_GREEN:
         return 0
     elif key == KEY_RED:
