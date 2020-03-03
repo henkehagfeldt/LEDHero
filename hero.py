@@ -171,11 +171,9 @@ def stupid_led_update():
         for y in range(0, 10):
             
             if map_selected[y + map_steps][x] > 0:
-                # First row, draw new pixels
-                if y == 9:
-                    lt.set_pixel(x, y)
-                else: 
-                    lt.drop_pixel(x, y)
+                lt.drop_pixel(x, y)
+            elif y == 9 and map_selected[y+ map_steps][x] == 0:
+                lt.set_pixel_clr(x, y, lt.WS_CLEAR)
                 #if y == 1:
                 #    lt.drop_pixel(x, y, state.COLOR_KEYS[str(x_to_key(x))])
                 #else:   
