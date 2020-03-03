@@ -249,7 +249,9 @@ class guitarThread(threading.Thread):
                         if state.menu and KEY_GREEN == event.code:
                             game_on()
                         elif state.done and KEY_GREEN == event.code:
+                            state.done = False
                             state.menu = True
+                            state.score = 0
 
 
                     # Strum
