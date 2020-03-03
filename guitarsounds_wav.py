@@ -24,7 +24,7 @@ def init_tones():
     midi_tones['g'] = pygame.mixer.Sound(filetype+'/'+mode+'/'+notes[10]+'.'+filetype)
     midi_tones['g#'] = pygame.mixer.Sound(filetype+'/'+mode+'/'+notes[11]+'.'+filetype)
     midi_tones['miss'] = pygame.mixer.Sound(filetype+'/'+mode+'/miss.'+filetype)
-    midi_tones['miss'] = pygame.mixer.Sound(filetype+'/'+mode+'/pace.'+filetype)
+    midi_tones['pace'] = pygame.mixer.Sound(filetype+'/'+mode+'/pace.'+filetype)
 
 
 def play_tone(tone):
