@@ -128,15 +128,9 @@ def print_keys():
 def set_button_leds():
     for (k, v) in state.COLOR_KEYS.items():
         if v:
-            lt.button_pixel_on(key_to_x(k))
-            print("BUtton on")
-            print("KEYTOX")
-            print(k)
-            print(KEY_GREEN)
-            print(k == KEY_GREEN)
-            time.sleep(5)
+            lt.button_pixel_on(key_to_x(int(k)))
         else:
-            lt.button_pixel_off(key_to_x(k))
+            lt.button_pixel_off(key_to_x(int(k)))
 
 def x_to_key(x):
     if x == 0:
