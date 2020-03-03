@@ -275,6 +275,8 @@ def preview_song_music(song):
     }
 
     play_tones(fake_keys)
+    print("Playing")
+    print(fake_keys)
 
 def preview_song_leds(song):
     for x in range(0,5):
@@ -290,6 +292,8 @@ g_thread.daemon = True
 g_thread.start()
 
 millis = get_millis()
+led_millis = get_millis()
+led_time = 10
 game_time = 400
 diff_time = 20
 menu = True
@@ -300,7 +304,10 @@ while True:
     
     # In menu
     if menu:
-        preview_song_leds(map_name)
+        if (get_millis() - led_millis) >= led_time:
+            led_millis = get_millis()
+            preview_song_leds(map_name)
+
         if (get_millis() - millis) >= (game_time - diff_time):
             millis = get_millis()
             preview_song_music(map_name)
