@@ -76,7 +76,7 @@ current_sound = None
 map_selected = mappings.get_map('hero')
 map_steps = 0
 map_update = True
-game_slowness = 3
+game_slowness = 10
 ticks = 0
 
 class state(object):
@@ -177,17 +177,6 @@ def stupid_led_update():
                 #else:   
                 #    lt.drop_pixel(x, y, False)
     map_update = False
-'''
-def getKey():
-    for event in guitar.read_loop():
-        if event.type == ecodes.EV_KEY or event.type == 3:
-            if event.value == 0:
-            else:
-                
-
-            e = categorize(event)
-            yield e.keycode
-'''
 
 class guitarThread(threading.Thread):
 
@@ -228,16 +217,6 @@ class guitarThread(threading.Thread):
                         #if state.current_sound != None:
                         #    stop_tones(state.current_sound)
 
-        '''
-        async def key_logger(dev):
-            async for ev in dev.async_read_loop():
-                #if ev.keycode in VALID_KEYS:
-                print(repr(ev))
-                #state.keys.append(ev.keycode)
-
-        loop = asyncio.get_event_loop()
-        loop.run_until_complete(key_logger(guitar))
-        '''
 
 
 g_thread = guitarThread(1, "Thread-1")
@@ -245,8 +224,6 @@ g_thread.daemon = True
 
 # Run the guitar-input thread
 g_thread.start()
-
-
 
 # Main Game Loop
 while True:
