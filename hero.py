@@ -262,13 +262,13 @@ def checkForHit():
 
 def change_speed(direction):
     state.led_millis = get_millis()
-    
+
     if direction == 1:
         if state.speed > 0:
             state.speed -= 1
             draw("arrow_up")
         else:
-            draw("line")
+            draw("cross")
 
     elif direction == -1:
         # Speed Down
@@ -276,7 +276,7 @@ def change_speed(direction):
             state.speed += 1
             draw("arrow_up")
         else:
-            draw("line")
+            draw("cross")
 
 def x_to_color(x):
     col = lt.WS_CLEAR
@@ -296,7 +296,7 @@ def draw(fig):
     figure = FIGURES[fig]
     for x in range(0, 5):
         for y in range(0, 10):
-            lt.set_pixel_clr(x, y, x_to_color(x))
+            lt.set_pixel_clr(x, y, x_to_color(figure[x][y]))
     
 
 class guitarThread(threading.Thread):
