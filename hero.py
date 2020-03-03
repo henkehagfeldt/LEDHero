@@ -67,8 +67,9 @@ KEY_TONES = {
 
 MAP_COLORS = {
     'weird': lt.WS_ORANGE,
-    'star': 'rainbow',
-    'bells': lt.WS_RED
+    'star': lt.WS_GREEN,
+    'bells': lt.WS_RED,
+    'pause': 'rainbow'
 }
 
 FIGURES = {
