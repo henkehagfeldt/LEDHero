@@ -241,7 +241,8 @@ class guitarThread(threading.Thread):
                         #if state.current_sound != None:
                         #    stop_tones(state.current_sound)
 
-
+def get_millis():
+    return int(round(time.time() * 1000))
 
 g_thread = guitarThread(1, "Thread-1")
 g_thread.daemon = True
@@ -249,7 +250,7 @@ g_thread.daemon = True
 # Run the guitar-input thread
 g_thread.start()
 
-millis = time.time*1000
+millis = get_millis()
 game_time = 200
 
 # Main Game Loop
@@ -324,8 +325,8 @@ while True:
     ticks += 1
 
     # Move the map a step, or finish if it's done
-    if (time.time*1000 - millis) >= game_time:
-        millis = time.time*1000
+    if (get_millis() - millis) >= game_time:
+        millis = get_millis()
     #if ticks >= game_slowness:
         if (map_steps + 11) < len(map_selected):
             map_steps += 1
