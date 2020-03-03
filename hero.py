@@ -259,12 +259,15 @@ def get_millis():
     return int(round(time.time() * 1000))
 
 def preview_song_music(song):
+
     if not state.previewing == song:
         state.previewing = song
         state.preview_step = 0
-
-    elif (state.preview_step + 11) < len(map_selected):
+    
+    if (state.preview_step + 11) < len(map_selected):
         state.preview_step += 1
+    else: 
+        state.preview_step = 0
 
     fake_keys = {
         str(KEY_GREEN): map_selected[state.preview_step][0] > 0,
