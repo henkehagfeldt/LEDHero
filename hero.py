@@ -418,7 +418,7 @@ def change_preview(direction):
     state.map_selected = mappings.get_map(state.map_name)
     
 def show_score(score):
-    actual_score = state.score * state.speed
+    actual_score = state.score * (9-state.speed)
 
     for x in range(0, 5):
         # state.score = 123
