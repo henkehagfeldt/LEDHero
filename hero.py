@@ -418,7 +418,8 @@ def change_preview(direction):
     state.map_selected = mappings.get_map(state.map_name)
     
 def show_score(score):
-    actual_score = state.score * (11-state.speed)
+    actual_score = state.score * 50
+    actual_score += state.score*2*(11-state.speed)
 
     for x in range(0, 5):
         # state.score = 123
@@ -443,7 +444,7 @@ millis = get_millis()
 led_time = 200
 diff_time = 20
 state.led_millis = get_millis()
-
+paced = False
 # Main Game Loop
 while True:
     
@@ -472,6 +473,7 @@ while True:
         # Move the map a step, or finish if it's done
         if (get_millis() - millis) >= (state.game_speed - diff_time):
             millis = get_millis()
+            paced = False
 
             if (map_steps + 11) < len(state.map_selected):
                 map_steps += 1
@@ -482,6 +484,8 @@ while True:
                 state.done = True
                 
             lt.clear_hits()
-            sounds.play_pace()
             print_keys()
+        elif (get_millis() - millis) >= (state.game_speed - diff_time)/2 and not paced:
+            paced = True
+            sounds.play_pace()
     lt.write_leds()
