@@ -362,7 +362,8 @@ while True:
                 map_update = True
             else:
                 # Map finished
-                map_steps = 0
+                map_steps = 
+                menu = True
                 
         
             ticks = 0
