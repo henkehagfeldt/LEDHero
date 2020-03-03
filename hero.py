@@ -264,16 +264,16 @@ def change_speed(direction):
     state.led_millis = get_millis()
 
     if direction == 1:
-        if state.speed < 10:
-            state.speed += 1
+        if state.speed > 0:
+            state.speed -= 1
             draw("arrow_up")
         else:
             draw("cross")
 
     elif direction == -1:
         # Speed Down
-        if state.speed > 0:
-            state.speed -= 1
+        if state.speed < 10:
+            state.speed += 1
             draw("arrow_down")
         else:
             draw("cross")
