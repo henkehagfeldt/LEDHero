@@ -129,6 +129,8 @@ def set_button_leds():
     for (k, v) in state.COLOR_KEYS.items():
         if v:
             lt.button_pixel_on(key_to_x(k))
+            print("Button on")
+            print(key_to_x(k))
         else:
             lt.button_pixel_off(key_to_x(k))
 
@@ -199,7 +201,7 @@ class guitarThread(threading.Thread):
                     # Color buttons
                     if event.code in state.valid_colors:
                         state.COLOR_KEYS[str(event.code)] = True
-                        lt.button_pixel_on(key_to_x(event.code))
+                        #lt.button_pixel_on(key_to_x(event.code))
                     # Strum
                     if event.code == KEY_STRUM and (event.value == 1 or event.value == -1):
                         # New strum from neutral
@@ -213,7 +215,7 @@ class guitarThread(threading.Thread):
                 else:
                     if event.code in state.valid_colors:
                         state.COLOR_KEYS[str(event.code)] = False
-                        lt.button_pixel_off(key_to_x(event.code))
+                        #lt.button_pixel_off(key_to_x(event.code))
                     elif event.code == KEY_STRUM:
                         state.strum_state = 0
                         #if state.current_sound != None:
@@ -295,7 +297,7 @@ while True:
     
     PUSHED_KEYS = TEMP_KEYS
     '''
-    #set_button_leds()
+    set_button_leds()
     lt.write_leds()
     ticks += 1
 
