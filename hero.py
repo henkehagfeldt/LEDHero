@@ -327,8 +327,10 @@ def change_preview(direction):
     
 def show_score(score):
     for x in range(0, 5):
+        # state.score = 123
         s = state.score % (10**(x+1))
-        s = math.floor(s / (10**(x+1)))
+        # s = 3
+        s = math.floor(s / (10**x))
 
         for y in range(0, 10):
             # 123
