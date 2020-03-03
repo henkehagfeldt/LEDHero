@@ -4,7 +4,7 @@ import time
 import pygame
 import led_tools as lt
 import mappings
-import guitarsounds_scipy as sounds
+import guitarsounds_wav as sounds
 from evdev import *
 import subprocess
 import asyncio
@@ -12,6 +12,7 @@ import threading
 
 #guitar = InputDevice('/dev/input/event0')
 lt.init_matrix()
+sounds.init_tones()
 
 KEY_STRUM = 17
 KEY_GREEN = 305
@@ -26,42 +27,42 @@ KEY_TONES = {
     '00000': 'f',
     '00001': 'a',
     '00010': 'b',
-    '00011': 'a',
+    '00011': 'g',
 
     '00100': 'c',
-    '00101': 'a',
-    '00110': 'a',
-    '00111': 'a',
+    '00101': 'd',
+    '00110': 'e',
+    '00111': 'c#',
 
     '01000': 'd',
-    '01001': 'a',
-    '01010': 'a',
-    '01011': 'a',
+    '01001': 'f#',
+    '01010': 'g#',
+    '01011': 'c',
 
-    '01100': 'a',
-    '01101': 'a',
-    '01110': 'a',
-    '01111': 'a',
+    '01100': 'd',
+    '01101': 'g#',
+    '01110': 'f',
+    '01111': 'e',
 
-    '10000': 'e',
+    '10000': 'b',
     '10001': 'a',
-    '10010': 'a',
+    '10010': 'a#',
     '10011': 'a',
     
-    '10100': 'a',
+    '10100': 'c#',
     '10101': 'a',
-    '10110': 'a',
-    '10111': 'a',
+    '10110': 'f',
+    '10111': 'f#',
 
     '11000': 'a',
-    '11001': 'a',
-    '11010': 'a',
-    '11011': 'a',
+    '11001': 'g',
+    '11010': 'b',
+    '11011': 'g#',
 
-    '11100': 'a',
+    '11100': 'd#',
     '11101': 'a',
-    '11110': 'a',
-    '11111': 'a'
+    '11110': 'f#',
+    '11111': 'g#'
 }
 
 strum_state = 0
@@ -93,7 +94,7 @@ class state(object):
 
 
 def play_tones(color_keys):
-    return sounds.play_tone(keys_to_tones(color_keys), oct=12)
+    return sounds.play_tone(keys_to_tones(color_keys))
 
 def stop_tones(sound):
     sounds.stop_tone(sound)
@@ -224,8 +225,8 @@ class guitarThread(threading.Thread):
                         lt.button_pixel_off(key_to_x(event.code))
                     elif event.code == KEY_STRUM:
                         state.strum_state = 0
-                        if state.current_sound != None:
-                            stop_tones(state.current_sound)
+                        #if state.current_sound != None:
+                        #    stop_tones(state.current_sound)
 
         '''
         async def key_logger(dev):

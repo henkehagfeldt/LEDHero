@@ -1,7 +1,7 @@
 from __future__ import division
 import time
 import pygame
-import guitarsounds_scipy as sounds
+import guitarsounds_wav as sounds
 from evdev import *
 import subprocess
 import asyncio
@@ -120,13 +120,6 @@ def print_keys():
     print("All pushed keys:")
     print(state.keys)
 
-def set_button_leds():
-    for (k, v) in state.COLOR_KEYS.items():
-        if v:
-            lt.button_pixel_on(key_to_x(k))
-        else:
-            lt.button_pixel_off(key_to_x(k))
-
 def x_to_key(x):
     if x == 0:
         return KEY_GREEN
@@ -179,7 +172,6 @@ class guitarThread(threading.Thread):
                         print("Strum")
                         if state.strum_state == 0:
                             state.strum_state = 1
-                            stop_tones(state.current_sound)
                             state.current_sound = play_tones(state.COLOR_KEYS)
                         # Still strumming from last cycle
                         elif state.strum_state == 1:
