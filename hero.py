@@ -76,7 +76,7 @@ current_sound = None
 map_selected = mappings.get_map('hero')
 map_steps = 0
 map_update = True
-game_slowness = 40
+game_slowness = 60
 ticks = 0
 
 class state(object):
