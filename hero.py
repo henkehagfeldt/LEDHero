@@ -66,6 +66,7 @@ KEY_TONES = {
 }
 
 MAP_COLORS = {
+    'weird': lt.WS_ORANGE,
     'star': 'rainbow'
 }
 
