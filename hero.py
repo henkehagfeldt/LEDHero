@@ -24,7 +24,7 @@ KEY_ORANGE = 308
 
 VALID_KEYS = {KEY_STRUM, KEY_GREEN, KEY_RED, KEY_YELLOW, KEY_BLUE, KEY_ORANGE}
 KEY_TONES = {
-    '00000': 'f',
+    '00000': 'notone',
     '00001': 'a',
     '00010': 'b',
     '00011': 'g',
@@ -65,6 +65,10 @@ KEY_TONES = {
     '11111': 'g#'
 }
 
+MAP_COLORS = {
+    'star': 'rainbow'
+}
+
 strum_state = 0
 
 # Currently pushed keys
@@ -73,7 +77,8 @@ PUSHED_KEYS = {}
 PLAYING_SOUNDS = {}
 current_sound = None
 
-map_selected = mappings.get_map('star')
+map_name = 'star'
+map_selected = mappings.get_map(map_name)
 map_steps = 0
 map_update = True
 game_slowness = 60
@@ -91,15 +96,20 @@ class state(object):
         str(KEY_ORANGE): False
     }
     valid_colors = [KEY_GREEN, KEY_RED, KEY_YELLOW, KEY_BLUE, KEY_ORANGE]
+    previewing = None
+    preview_step = 0
 
 
 def play_tones(color_keys):
+    # Plays the sound associated with the set buttons in color_keys
     return sounds.play_tone(keys_to_tones(color_keys))
 
 def stop_tones(sound):
     sounds.stop_tone(sound)
 
 def keys_to_tones(keys):
+    # Converts Dict values to binary strings
+    # Then converts to corresponding tone e.g 'f'
     binary_keys = ""
     binary_keys += str(int(state.COLOR_KEYS[str(KEY_GREEN)])) 
     binary_keys += str(int(state.COLOR_KEYS[str(KEY_RED)])) 
@@ -214,35 +224,64 @@ class guitarThread(threading.Thread):
 
         for event in guitar.read_loop():
             if event.type == ecodes.EV_KEY or event.type == 3:
+
                 # Key active
                 if event.value != 0:
                     if not (event.code in state.keys):
                         state.keys.append(event.code)
+
                     # Color buttons
                     if event.code in state.valid_colors:
                         state.COLOR_KEYS[str(event.code)] = True
-                        #lt.button_pixel_on(key_to_x(event.code))
+
                     # Strum
                     if event.code == KEY_STRUM and (event.value == 1 or event.value == -1):
+
                         # New strum from neutral
                         if state.strum_state == 0:
                             state.strum_state = 1
-                            checkForHit()
+                            if not menu:
+                                checkForHit()
+
                         # Still strumming from last cycle
                         elif state.strum_state == 1:
                             state.strum_state = 2
+
                 # Key inactive
                 else:
                     if event.code in state.valid_colors:
                         state.COLOR_KEYS[str(event.code)] = False
-                        #lt.button_pixel_off(key_to_x(event.code))
                     elif event.code == KEY_STRUM:
                         state.strum_state = 0
-                        #if state.current_sound != None:
-                        #    stop_tones(state.current_sound)
+ 
 
 def get_millis():
     return int(round(time.time() * 1000))
+
+def preview_song_music(song):
+    if not state.previewing == song:
+        state.previewing = song
+        state.preview_step = 0
+
+    elif (state.preview_step + 11) < len(map_selected):
+        state.preview_step += 1
+
+    fake_keys = {
+        str(KEY_GREEN): map_selected[state.preview_step][0] > 0,
+        str(KEY_RED): map_selected[state.preview_step][1] > 0,
+        str(KEY_YELLOW): map_selected[state.preview_step][2] > 0,
+        str(KEY_BLUE): map_selected[state.preview_step][3] > 0,
+        str(KEY_ORANGE): map_selected[state.preview_step][4] > 0,
+    }
+
+    play_tones(fake_keys)
+
+def preview_song_leds(song):
+    for x in range(0,5):
+        for y in range(0,10):
+            lt.set_pixel_clr(x, y, MAP_COLORS[song])
+    
+    
 
 g_thread = guitarThread(1, "Thread-1")
 g_thread.daemon = True
@@ -253,90 +292,42 @@ g_thread.start()
 millis = get_millis()
 game_time = 400
 diff_time = 20
+menu = True
+
 
 # Main Game Loop
 while True:
-
-    if map_update == True:
-        stupid_led_update()
     
-    first_input = None
-    # Check Input
-    '''for event in getKey():
-        next_key = next(getKey())
-        if next_key in state.keys:
-            break 
-        else:
-            state.keys.append(next_key)
-'''
-    #state.keys = guitar.active_keys()
+    # In menu
+    if menu:
+        preview_song_leds(map_name)
+        if (get_millis() - millis) >= (game_time - diff_time):
+            millis = get_millis()
+            preview_song_music(map_name)
+        menu = False
+    # In game
+    else:
+        # Check if the led matrix should move a step
+        if map_update:
+            stupid_led_update()
 
-    # Print input every 50 ticks
-    if ((ticks % 5) == 0):
-        print_keys()
-    '''
-    # Register new keys
-    TEMP_KEYS = {}
-    for k in range(0, len(keys)):
-        if keys[k] in VALID_KEYS:
-            TEMP_KEYS[k] = True
-    
-    # Check which keys are no longer held
-    for k in PUSHED_KEYS:
-        if k not in TEMP_KEYS:
-            # Key released
-            if(str(k) in COLOR_KEYS):
-                COLOR_KEYS[str(k)] = False
-                lt.button_pixel_off(key_to_x(k))
-            
-            if(k == KEY_STRUM):
-                strum_state = 0
-    
-    # Check which keys that are triggered this cycle
-    for k in TEMP_KEYS:
-        if k not in PUSHED_KEYS:
-            # New keys pressed
-            if(str(k) in COLOR_KEYS):
-                COLOR_KEYS[str(k)] = True
-                lt.button_pixel_on(key_to_x(k))
-            
-            # Check strumbar
-            if(k == KEY_STRUM):
-                # New strum from neutral
-                if strum_state == 0:
-                    strum_state = 1
-                # Still strumming from last cycle
-                elif strum_state == 1:
-                    strum_state = 2
+        # Set the LEDs for which buttons are pressed
+        set_button_leds()
 
-    
-    #sounds.stop_tone(PLAYING_SOUNDS[k])
-    
-    # Play Sounds on new strum
-    if(strum_state == 1):
-        current_sound = play_tones(COLOR_KEYS)
+        # Move the map a step, or finish if it's done
+        if (get_millis() - millis) >= (game_time - diff_time):
+            millis = get_millis()
 
-
-    #s = sounds.play_tone('a#', oct=4)
-    #sounds.stop_tone(s)
-    
-    PUSHED_KEYS = TEMP_KEYS
-    '''
-    set_button_leds()
-    ticks += 1
-
-    # Move the map a step, or finish if it's done
-    if (get_millis() - millis) >= (game_time - diff_time):
-        millis = get_millis()
-    #if ticks >= game_slowness:
-        if (map_steps + 11) < len(map_selected):
-            map_steps += 1
-            map_update = True
-        else:
-            map_steps = 0
-            # Map finished
-            #break
-        ticks = 0
-        lt.clear_hits()
-        sounds.play_pace()
+            if (map_steps + 11) < len(map_selected):
+                map_steps += 1
+                map_update = True
+            else:
+                # Map finished
+                map_steps = 0
+                
+        
+            ticks = 0
+            lt.clear_hits()
+            sounds.play_pace()
+            print_keys()
     lt.write_leds()
