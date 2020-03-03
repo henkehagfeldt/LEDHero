@@ -102,6 +102,8 @@ class state(object):
     previewing = None
     preview_step = 0
     menu = True
+    done = False
+    score = 0
 
 
 def play_tones(color_keys):
@@ -212,8 +214,12 @@ def checkForHit():
             lt.hit_led(x)
 
     if hit:
+        state.score += 1
         state.current_sound = play_tones(state.COLOR_KEYS)
     else:
+        state.score -= 1
+        if state.score < 0:
+            state.score = 0
         state.current_sound = sounds.play_miss()
 
 class guitarThread(threading.Thread):
@@ -318,7 +324,16 @@ def change_preview(direction):
     state.map_name = map_list[state.map_index]
     state.map_selected = mappings.get_map(state.map_name)
     
+def show_score(score):
+    for x in range(0, 5):
+        lower = 0
+        s = state.score % (10**(x+1)) - lower
+        for y in range(0, 10):
+            # 123
+            if(s > (y + 1)):
+                lt.set_pixel_clr(x, y, 'rainbow')
 
+            
 g_thread = guitarThread(1, "Thread-1")
 g_thread.daemon = True
 
@@ -345,6 +360,8 @@ while True:
             millis = get_millis()
             preview_song_music(state.map_name)
     # In game
+    elif state.done:
+        show_score(state.score)
     else:
         # Check if the led matrix should move a step
         if map_update:
@@ -363,7 +380,7 @@ while True:
             else:
                 # Map finished
                 map_steps = 0
-                state.menu = True
+                state.done = True
                 
             lt.clear_hits()
             sounds.play_pace()
