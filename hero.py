@@ -132,7 +132,7 @@ def set_button_leds():
             lt.button_pixel_on(x)
         else:
             # Check if button is on according to map
-            if map_selected[1 + map_steps][x] > 0:
+            if map_selected[map_steps + 2][x] > 0:
                 lt.set_pixel(x, 1)
             else:
                 # Else turn pixel off
