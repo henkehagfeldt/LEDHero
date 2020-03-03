@@ -168,13 +168,12 @@ def color_active(x):
 def stupid_led_update():
     # Update LED-Matrix
     for x in range(0, 5):
-        for y in range(0, 10):
-            
+        for y in range(-1, 10):
             if map_selected[y + map_steps][x] > 0:
                 lt.drop_pixel(x, y)
-            elif y == 9 and map_selected[y + map_steps][x] == 0:
-                print("Y is 9 and should be cleared")
-                lt.set_pixel_clr(x, y, lt.WS_CLEAR)
+            #elif y == 9 and map_selected[y + map_steps][x] == 0:
+            #    print("Y is 9 and should be cleared")
+           #     lt.set_pixel_clr(x, y, lt.WS_CLEAR)
                 #if y == 1:
                 #    lt.drop_pixel(x, y, state.COLOR_KEYS[str(x_to_key(x))])
                 #else:   

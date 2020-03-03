@@ -75,8 +75,12 @@ def move_pixel(new_x, new_y, old_x, old_y):
     if new_y >= 0: 
         pixels.set_pixel(led_matrix[new_x][new_y], get_col_color(new_x, False))
 
+# Takes a pixel at position (x, y) and moves it down one step to (x, y - 1)
 def drop_pixel(x, y):
-    move_pixel(x, y, x, y+1)
+    if y == -1:
+        set_pixel(x, y - 1)
+    else:
+        move_pixel(x, y - 1, x, y)
 
 def set_pixel(x, y):
     set_pixel_clr(x, y, get_col_color(x, False))
