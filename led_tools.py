@@ -17,6 +17,7 @@ WS_DBLUE = ws.RGB_to_color(0, int(255*dark), 0)
 WS_ORANGE = ws.RGB_to_color(255, 0, 60)
 WS_DORANGE = ws.RGB_to_color(int(255*dark), 0, int(60*dark))
 WS_CLEAR = ws.RGB_to_color(0, 0, 0)
+WS_WHITE = ws.RGB_to_color(255, 255, 255)
 
 PXL_CNT = 50
 PXL_COL_CNT = 10
@@ -100,11 +101,11 @@ def write_leds():
     pixels.show()
 
 def hit_led(x):
-    set_pixel_clr(x, 0, WS_GREEN)
+    set_pixel_clr(x, 0, WS_WHITE)
 
 def miss_led(x):
     set_pixel_clr(x, 0, WS_RED)
 
 def clear_hits():
-    for x in range(0,5):
+    for x in range(0, 5):
         set_pixel_clr(x, 0, WS_CLEAR)
