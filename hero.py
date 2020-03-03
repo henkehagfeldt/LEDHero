@@ -301,7 +301,7 @@ while True:
 
     # Move the map a step, or finish if it's done
     if ticks >= game_slowness:
-        if (map_steps + 10) < len(map_selected):
+        if (map_steps + 11) < len(map_selected):
             map_steps += 1
             map_update = True
         else:
