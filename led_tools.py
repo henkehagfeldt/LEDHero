@@ -104,3 +104,7 @@ def hit_led(x):
 
 def miss_led(x):
     set_pixel_clr(x, 0, WS_RED)
+
+def clear_hits():
+    for x in range(0,5):
+        set_pixel_clr(x, 0, WS_CLEAR)

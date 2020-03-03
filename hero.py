@@ -318,7 +318,6 @@ while True:
     PUSHED_KEYS = TEMP_KEYS
     '''
     set_button_leds()
-    lt.write_leds()
     ticks += 1
 
     # Move the map a step, or finish if it's done
@@ -331,3 +330,5 @@ while True:
             # Map finished
             #break
         ticks = 0
+        lt.clear_hits()
+    lt.write_leds()
