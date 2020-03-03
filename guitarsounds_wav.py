@@ -23,12 +23,13 @@ def init_tones():
     midi_tones['f#'] = pygame.mixer.Sound(filetype+'/'+mode+'/'+notes[9]+'.'+filetype)
     midi_tones['g'] = pygame.mixer.Sound(filetype+'/'+mode+'/'+notes[10]+'.'+filetype)
     midi_tones['g#'] = pygame.mixer.Sound(filetype+'/'+mode+'/'+notes[11]+'.'+filetype)
+    midi_tones['miss'] = pygame.mixer.Sound(filetype+'/'+mode+'/miss.'+filetype)
 
 
 def play_tone(tone):
     print("Play sound")
     if tone in midi_tones:
-        midi_tones[tone].play(loops=-1, maxtime=1000,fade_ms=200)
+        midi_tones[tone].play(loops=1, maxtime=1000,fade_ms=200)
         midi_tones[tone].fadeout(1600)
         
     
@@ -38,3 +39,7 @@ def stop_tone(tone):
     except Exception as e:
         print("Sound can't be stopped.")
         print(e) 
+
+def play_miss():
+    midi_tones['miss'].play(loops=1, maxtime=1000,fade_ms=200)
+    midi_tones['miss'].fadeout(1600)

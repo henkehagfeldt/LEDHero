@@ -179,14 +179,24 @@ def stupid_led_update():
         for y in range(0, 11):
             if map_selected[y + map_steps][x] > 0:
                 lt.drop_pixel(x, y)
-            #elif y == 9 and map_selected[y + map_steps][x] == 0:
-            #    print("Y is 9 and should be cleared")
-           #     lt.set_pixel_clr(x, y, lt.WS_CLEAR)
-                #if y == 1:
-                #    lt.drop_pixel(x, y, state.COLOR_KEYS[str(x_to_key(x))])
-                #else:   
-                #    lt.drop_pixel(x, y, False)
+
     map_update = False
+
+def checkForHit():
+    hit = True
+    for (k, v) in state.COLOR_KEYS.items():
+        x = key_to_x(int(k))
+        if map_selected[map_steps + 2][x] > 0 and not v:
+            # Note missed
+            hit = False
+        elif not map_selected[map_steps + 2][x] > 0 and v:
+            # Hit nothing
+            hit = False
+
+        if hit:
+            state.current_sound = play_tones(state.COLOR_KEYS)
+        else:
+            state.current_sound = sounds.play_miss()
 
 class guitarThread(threading.Thread):
 
@@ -213,7 +223,7 @@ class guitarThread(threading.Thread):
                         # New strum from neutral
                         if state.strum_state == 0:
                             state.strum_state = 1
-                            state.current_sound = play_tones(state.COLOR_KEYS)
+                            checkForHit()
                         # Still strumming from last cycle
                         elif state.strum_state == 1:
                             state.strum_state = 2
