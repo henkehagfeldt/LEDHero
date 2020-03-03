@@ -127,10 +127,16 @@ def print_keys():
 
 def set_button_leds():
     for (k, v) in state.COLOR_KEYS.items():
+        x = key_to_x(int(k))
         if v:
-            lt.button_pixel_on(key_to_x(int(k)))
+            lt.button_pixel_on(x)
         else:
-            lt.button_pixel_off(key_to_x(int(k)))
+            # Check if button is on according to map
+            if map_selected[1 + map_steps][x] > 0:
+                lt.set_pixel(x, 1)
+            else:
+                # Else turn pixel off
+                lt.button_pixel_off(x)
 
 def x_to_key(x):
     if x == 0:
