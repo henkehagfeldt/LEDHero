@@ -193,10 +193,10 @@ def checkForHit():
             # Hit nothing
             hit = False
 
-        if hit:
-            state.current_sound = play_tones(state.COLOR_KEYS)
-        else:
-            state.current_sound = sounds.play_miss()
+    if hit:
+        state.current_sound = play_tones(state.COLOR_KEYS)
+    else:
+        state.current_sound = sounds.play_miss()
 
 class guitarThread(threading.Thread):
 
