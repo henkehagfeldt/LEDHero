@@ -22,7 +22,6 @@ KEY_YELLOW = 304
 KEY_BLUE = 307
 KEY_ORANGE = 308
 
-
 VALID_KEYS = {KEY_STRUM, KEY_GREEN, KEY_RED, KEY_YELLOW, KEY_BLUE, KEY_ORANGE}
 KEY_TONES = {
     '00000': 'notone',
@@ -71,6 +70,41 @@ MAP_COLORS = {
     'star': 'rainbow'
 }
 
+FIGURES = {
+    'cross': [
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [1, 0, 0, 0, 1],
+        [0, 1, 0, 1, 0],
+        [0, 0, 1, 0, 0],
+        [0, 1, 0, 1, 0],
+        [1, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],],
+    'arrow_up': [
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 1, 0, 0],
+        [0, 1, 1, 1, 0],
+        [1, 1, 0, 1, 1],
+        [1, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],],
+    'arrow_down': [
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [3, 0, 0, 0, 3],
+        [3, 3, 0, 3, 3],
+        [0, 3, 3, 3, 0],
+        [0, 0, 3, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],]
+}
 strum_state = 0
 
 # Currently pushed keys
@@ -105,7 +139,9 @@ class state(object):
     menu = True
     done = False
     score = 0
-    speed = 400
+    speed = 5
+    game_speed = 400
+    led_millis = 0
 
 
 def play_tones(color_keys):
@@ -224,6 +260,45 @@ def checkForHit():
             state.score = 0
         state.current_sound = sounds.play_miss()
 
+def change_speed(direction):
+    state.led_millis = get_millis()
+    
+    if direction == 1:
+        if state.speed > 0:
+            state.speed -= 1
+            draw("arrow_up")
+        else:
+            draw("line")
+
+    elif direction == -1:
+        # Speed Down
+        if state.speed < 10:
+            state.speed += 1
+            draw("arrow_up")
+        else:
+            draw("line")
+
+def x_to_color(x):
+    col = lt.WS_CLEAR
+    if x == 1:
+        col = lt.WS_GREEN
+    elif x == 2:
+        col = lt.WS_RED
+    elif x == 3:
+        col = lt.WS_YELLOW
+    elif x == 4:
+        col = lt.WS_BLUE
+    elif x == 5:
+        col = lt.WS_ORANGE
+    return col
+
+def draw(fig):
+    figure = FIGURES[fig]
+    for x in range(0, 5):
+        for y in range(0, 10):
+            lt.set_pixel_clr(x, y, x_to_color(x))
+    
+
 class guitarThread(threading.Thread):
 
     def __init__(self, threadID, name):
@@ -251,12 +326,13 @@ class guitarThread(threading.Thread):
                             if KEY_GREEN == event.code:
                                 game_on()
                             elif KEY_RED == event.code:
-                                # Speed Down
-                                if state.speed < 700:
-                                    state.speed += 30
+                                # Speed down
+                                change_speed(-1)
+                                
                             elif KEY_YELLOW == event.code:
-                                if state.speed > 220:
-                                    state.speed -= 30 
+                                # Speed up
+                                change_speed(1)
+                                
                         elif state.done and KEY_GREEN == event.code:
                             state.done = False
                             state.menu = True
@@ -296,6 +372,9 @@ def game_on():
 
     # Disable menu mode
     state.menu = False
+
+    # Set game speed
+    state.game_speed = 200 + (state.speed * 30) 
 
 def get_millis():
     return int(round(time.time() * 1000))
@@ -341,6 +420,7 @@ def change_preview(direction):
 def show_score(score):
     multiplier = (state.speed - 190) / 30
     actual_score = state.score * multiplier
+
     for x in range(0, 5):
         # state.score = 123
         s = actual_score % (10**(x+1))
@@ -360,27 +440,27 @@ g_thread.daemon = True
 g_thread.start()
 
 millis = get_millis()
-led_millis = get_millis()
+
 led_time = 200
 diff_time = 20
-
+state.led_millis = get_millis()
 
 # Main Game Loop
 while True:
     
     # In menu
     if state.menu:
-        if (get_millis() - led_millis) >= led_time:
-            led_millis = get_millis()
+        if (get_millis() - state.led_millis) >= led_time:
+            state.led_millis = get_millis()
             preview_song_leds(state.map_name)
 
-        if (get_millis() - millis) >= (state.speed - diff_time):
+        if (get_millis() - millis) >= (state.game_speed - diff_time):
             millis = get_millis()
             preview_song_music(state.map_name)
     # In game
     elif state.done:
-        if (get_millis() - led_millis) >= led_time:
-            led_millis = get_millis()
+        if (get_millis() - state.led_millis) >= led_time:
+            state.led_millis = get_millis()
             show_score(state.score)
     else:
         # Check if the led matrix should move a step
@@ -391,7 +471,7 @@ while True:
         set_button_leds()
 
         # Move the map a step, or finish if it's done
-        if (get_millis() - millis) >= (state.speed - diff_time):
+        if (get_millis() - millis) >= (state.game_speed - diff_time):
             millis = get_millis()
 
             if (map_steps + 11) < len(state.map_selected):
