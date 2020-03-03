@@ -370,6 +370,9 @@ class guitarThread(threading.Thread):
  
 def game_on():
 
+    if state.map_name == 'pause':
+        return
+        
     # Clear all LEDs
     for x in range(0, 5):
         for y in range(0, 10):
