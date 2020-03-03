@@ -88,7 +88,7 @@ ticks = 0
 class state(object):
     map_index = 0
     map_name = map_list[map_index]
-    map_selected = mappings.get_map(state.map_name)
+    map_selected = mappings.get_map(map_name)
     current_sound = None
     keys = []
     strum_state = 0
