@@ -101,6 +101,7 @@ class state(object):
     valid_colors = [KEY_GREEN, KEY_RED, KEY_YELLOW, KEY_BLUE, KEY_ORANGE]
     previewing = None
     preview_step = 0
+    menu = True
 
 
 def play_tones(color_keys):
@@ -237,13 +238,18 @@ class guitarThread(threading.Thread):
                     if event.code in state.valid_colors:
                         state.COLOR_KEYS[str(event.code)] = True
 
+                        # Choose song
+                        if state.menu and KEY_GREEN == event.code:
+                            state.menu = False
+
+
                     # Strum
                     if event.code == KEY_STRUM and (event.value == 1 or event.value == -1):
 
                         # New strum from neutral
                         if state.strum_state == 0:
                             state.strum_state = 1
-                            if not menu:
+                            if not state.menu:
                                 # Check for a hit if playing a song
                                 checkForHit()
                             else:
@@ -269,13 +275,17 @@ def preview_song_music(song):
 
     if not state.previewing == song:
         state.previewing = song
-        state.preview_step = 4
+
+        # Give a head start to skip all initial dead notes
+        state.preview_step = 8
     
     if (state.preview_step + 11) < len(state.map_selected):
         state.preview_step += 1
-    else: 
+    else:
+        # Restart song preview
         state.preview_step = 0
 
+    # Simulate actual correct keys being pressed
     fake_keys = {
         str(KEY_GREEN): state.map_selected[state.preview_step][0] > 0,
         str(KEY_RED): state.map_selected[state.preview_step][1] > 0,
@@ -311,14 +321,13 @@ led_millis = get_millis()
 led_time = 200
 game_time = 400
 diff_time = 20
-menu = True
 
 
 # Main Game Loop
 while True:
     
     # In menu
-    if menu:
+    if state.menu:
         if (get_millis() - led_millis) >= led_time:
             led_millis = get_millis()
             preview_song_leds(state.map_name)
