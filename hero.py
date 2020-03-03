@@ -351,7 +351,7 @@ g_thread.start()
 millis = get_millis()
 led_millis = get_millis()
 led_time = 200
-game_time = 100
+game_time = 30
 diff_time = 20
 
 
