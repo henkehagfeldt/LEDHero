@@ -294,6 +294,7 @@ while True:
     PUSHED_KEYS = TEMP_KEYS
     '''
     set_button_leds()
+    lt.set_pixel_clr(4, 1, lt.WS_BLUE)
     lt.write_leds()
     ticks += 1
 
