@@ -72,7 +72,7 @@ def get_col_color(x, button):
 def move_pixel(new_x, new_y, old_x, old_y):  
     if old_x >= 0 and old_y >= 0 and old_x <= 4 and old_y <= 9:      
         pixels.set_pixel(led_matrix[old_x][old_y], WS_CLEAR)
-    if new_y >= 0: 
+    if new_y >= 1: 
         pixels.set_pixel(led_matrix[new_x][new_y], get_col_color(new_x, False))
 
 # Takes a pixel at position (x, y) and moves it down one step to (x, y - 1)
