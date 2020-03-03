@@ -278,6 +278,9 @@ def change_speed(direction):
         else:
             draw("cross")
 
+    # Set game speed
+    state.game_speed = 200 + (state.speed * 30) 
+
 def x_to_color(x):
     col = lt.WS_CLEAR
     if x == 1:
@@ -295,8 +298,8 @@ def x_to_color(x):
 def draw(fig):
     figure = FIGURES[fig]
     for x in range(0, 5):
-        for y in range(9, -1, -1):
-            lt.set_pixel_clr(x, y, x_to_color(figure[y][x]))
+        for y in range(0, 10):
+            lt.set_pixel_clr(x, y, x_to_color(figure[9-y][x]))
     
 
 class guitarThread(threading.Thread):
@@ -372,9 +375,6 @@ def game_on():
 
     # Disable menu mode
     state.menu = False
-
-    # Set game speed
-    state.game_speed = 200 + (state.speed * 30) 
 
 def get_millis():
     return int(round(time.time() * 1000))
