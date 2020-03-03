@@ -252,6 +252,7 @@ g_thread.start()
 
 millis = get_millis()
 game_time = 400
+diff_time = 20
 
 # Main Game Loop
 while True:
@@ -325,7 +326,7 @@ while True:
     ticks += 1
 
     # Move the map a step, or finish if it's done
-    if (get_millis() - millis) >= game_time:
+    if (get_millis() - millis) >= (game_time - diff_time):
         millis = get_millis()
     #if ticks >= game_slowness:
         if (map_steps + 11) < len(map_selected):
