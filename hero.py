@@ -78,15 +78,16 @@ PUSHED_KEYS = {}
 PLAYING_SOUNDS = {}
 current_sound = None
 map_list = mappings.get_map_list()
-map_index = 0
-map_name = map_list[map_index]
-map_selected = mappings.get_map(map_name)
+
 map_steps = 0
 map_update = True
 game_slowness = 60
 ticks = 0
 
 class state(object):
+    map_index = 0
+    map_name = map_list[map_index]
+    map_selected = mappings.get_map(map_name)
     current_sound = None
     keys = []
     strum_state = 0
@@ -144,7 +145,7 @@ def set_button_leds():
             lt.button_pixel_on(x)
         else:
             # Check if button is on according to map
-            if map_selected[map_steps + 2][x] > 0:
+            if state.map_selected[map_steps + 2][x] > 0:
                 lt.set_pixel(x, 1)
             else:
                 # Else turn pixel off
@@ -189,7 +190,7 @@ def stupid_led_update():
     # Update LED-Matrix
     for x in range(0, 5):
         for y in range(0, 11):
-            if map_selected[y + map_steps][x] > 0:
+            if state.map_selected[y + map_steps][x] > 0:
                 lt.drop_pixel(x, y)
 
     map_update = False
@@ -198,15 +199,15 @@ def checkForHit():
     hit = True
     for (k, v) in state.COLOR_KEYS.items():
         x = key_to_x(int(k))
-        if map_selected[map_steps + 2][x] > 0 and not v:
+        if state.map_selected[map_steps + 2][x] > 0 and not v:
             # Note missed
             hit = False
             lt.miss_led(x)
-        elif not map_selected[map_steps + 2][x] > 0 and v:
+        elif not state.map_selected[map_steps + 2][x] > 0 and v:
             # Hit nothing
             hit = False
             lt.miss_led(x)
-        elif map_selected[map_steps + 2][x] > 0 and v:
+        elif state.map_selected[map_steps + 2][x] > 0 and v:
             lt.hit_led(x)
 
     if hit:
@@ -270,17 +271,17 @@ def preview_song_music(song):
         state.previewing = song
         state.preview_step = 0
     
-    if (state.preview_step + 11) < len(map_selected):
+    if (state.preview_step + 11) < len(state.map_selected):
         state.preview_step += 1
     else: 
         state.preview_step = 0
 
     fake_keys = {
-        str(KEY_GREEN): map_selected[state.preview_step][0] > 0,
-        str(KEY_RED): map_selected[state.preview_step][1] > 0,
-        str(KEY_YELLOW): map_selected[state.preview_step][2] > 0,
-        str(KEY_BLUE): map_selected[state.preview_step][3] > 0,
-        str(KEY_ORANGE): map_selected[state.preview_step][4] > 0,
+        str(KEY_GREEN): state.map_selected[state.preview_step][0] > 0,
+        str(KEY_RED): state.map_selected[state.preview_step][1] > 0,
+        str(KEY_YELLOW): state.map_selected[state.preview_step][2] > 0,
+        str(KEY_BLUE): state.map_selected[state.preview_step][3] > 0,
+        str(KEY_ORANGE): state.map_selected[state.preview_step][4] > 0,
     }
 
     play_tones(fake_keys)
@@ -292,11 +293,11 @@ def preview_song_leds(song):
 
 def change_preview(direction):
     if(direction == 1):
-        map_index = (map_index + 1) % len(map_list)
+        state.map_index = (state.map_index + 1) % len(map_list)
     elif(direction == -1):
-        map_index = (map_index - 1) % len(map_list)
-    map_name = map_list[map_index]
-    map_selected = mappings.get_map(map_name)
+        state.map_index = (state.map_index - 1) % len(map_list)
+    state.map_name = map_list[state.map_index]
+    state.map_selected = mappings.get_map(state.map_name)
     
 
 g_thread = guitarThread(1, "Thread-1")
@@ -320,11 +321,11 @@ while True:
     if menu:
         if (get_millis() - led_millis) >= led_time:
             led_millis = get_millis()
-            preview_song_leds(map_name)
+            preview_song_leds(state.map_name)
 
         if (get_millis() - millis) >= (game_time - diff_time):
             millis = get_millis()
-            preview_song_music(map_name)
+            preview_song_music(state.map_name)
     # In game
     else:
         # Check if the led matrix should move a step
@@ -338,7 +339,7 @@ while True:
         if (get_millis() - millis) >= (game_time - diff_time):
             millis = get_millis()
 
-            if (map_steps + 11) < len(map_selected):
+            if (map_steps + 11) < len(state.map_selected):
                 map_steps += 1
                 map_update = True
             else:
