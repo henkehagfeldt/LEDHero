@@ -8,7 +8,7 @@ filetype = 'wav'
 mode = 'Acoustic'
 notes = ['A3', 'A3#_B3b', 'B3', 'C3', 'C3#_D3b', 'D3', 'D3#_E3b', 'E3', 'F3', 'F3#_G3b', 'G3', 'G3#_A3b']
 def init_tones():
-    pygame.mixer.init(44100, -16, 1, 512)
+    pygame.mixer.init(44100, -16, 1, 1024)
     #pygame.mixer.init()
     #pygame.init()
     midi_tones['a'] = pygame.mixer.Sound(filetype+'/'+mode+'/'+notes[0]+'.'+filetype)
