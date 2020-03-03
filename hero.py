@@ -73,7 +73,7 @@ PUSHED_KEYS = {}
 PLAYING_SOUNDS = {}
 current_sound = None
 
-map_selected = mappings.get_map('hero')
+map_selected = mappings.get_map('star')
 map_steps = 0
 map_update = True
 game_slowness = 60
@@ -331,4 +331,5 @@ while True:
             #break
         ticks = 0
         lt.clear_hits()
+        sounds.play_pace()
     lt.write_leds()
