@@ -363,10 +363,8 @@ while True:
             else:
                 # Map finished
                 map_steps = 0
-                menu = True
+                state.menu = True
                 
-        
-            ticks = 0
             lt.clear_hits()
             sounds.play_pace()
             print_keys()
