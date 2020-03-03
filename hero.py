@@ -278,8 +278,6 @@ def preview_song_music(song):
     }
 
     play_tones(fake_keys)
-    print("Playing")
-    print(fake_keys)
 
 def preview_song_leds(song):
     for x in range(0,5):
