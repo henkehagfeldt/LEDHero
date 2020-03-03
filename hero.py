@@ -145,9 +145,15 @@ def x_to_key(x):
         return KEY_BLUE
     elif x == 4:
         return KEY_ORANGE
-    return -1
+    else:
+        return -1
     
 def key_to_x(key):
+    print("KEYTOX")
+    print(key)
+    print(KEY_GREEN)
+    print(key == KEY_GREEN)
+    time.sleep(5)
     if key == KEY_GREEN:
         return 0
     elif key == KEY_RED:
@@ -158,8 +164,8 @@ def key_to_x(key):
         return 3
     elif key == KEY_ORANGE:
         return 4
-
-    return -1
+    else:
+        return -1
 
 def smart_led_update():
     print("I'm Better, hopefully")
