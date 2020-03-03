@@ -248,6 +248,8 @@ class guitarThread(threading.Thread):
                         # Choose song
                         if state.menu and KEY_GREEN == event.code:
                             game_on()
+                        elif state.done and KEY_GREEN == event.code:
+                            state.menu = True
 
 
                     # Strum
@@ -334,7 +336,7 @@ def show_score(score):
 
         for y in range(0, 10):
             # 123
-            if(s > (y + 1)):
+            if(s >= (y + 1)):
                 lt.set_pixel_clr(x, y, 'rainbow')
 
             
