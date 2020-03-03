@@ -247,7 +247,7 @@ class guitarThread(threading.Thread):
                                 checkForHit()
                             else:
                                 # Switch song preview if in menu
-                                changePreview(event.value)
+                                change_preview(event.value)
 
                         # Still strumming from last cycle
                         elif state.strum_state == 1:
