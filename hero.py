@@ -88,7 +88,7 @@ ticks = 0
 class state(object):
     map_index = 0
     map_name = map_list[map_index]
-    map_selected = mappings.get_map(map_name)
+    map_selected = mappings.get_map(state.map_name)
     current_sound = None
     keys = []
     strum_state = 0
@@ -105,6 +105,7 @@ class state(object):
     menu = True
     done = False
     score = 0
+    speed = 400
 
 
 def play_tones(color_keys):
@@ -246,8 +247,16 @@ class guitarThread(threading.Thread):
                         state.COLOR_KEYS[str(event.code)] = True
 
                         # Choose song
-                        if state.menu and KEY_GREEN == event.code:
-                            game_on()
+                        if state.menu:
+                            if KEY_GREEN == event.code:
+                                game_on()
+                            elif KEY_RED == event.code:
+                                # Speed Down
+                                if state.speed < 700:
+                                    state.speed += 20
+                            elif KEY_YELLOW == event.code:
+                                if state.speed > 200:
+                                    state.speed -= 20 
                         elif state.done and KEY_GREEN == event.code:
                             state.done = False
                             state.menu = True
@@ -351,7 +360,6 @@ g_thread.start()
 millis = get_millis()
 led_millis = get_millis()
 led_time = 200
-game_time = 30
 diff_time = 20
 
 
@@ -364,7 +372,7 @@ while True:
             led_millis = get_millis()
             preview_song_leds(state.map_name)
 
-        if (get_millis() - millis) >= (game_time - diff_time):
+        if (get_millis() - millis) >= (state.speed - diff_time):
             millis = get_millis()
             preview_song_music(state.map_name)
     # In game
@@ -381,7 +389,7 @@ while True:
         set_button_leds()
 
         # Move the map a step, or finish if it's done
-        if (get_millis() - millis) >= (game_time - diff_time):
+        if (get_millis() - millis) >= (state.speed - diff_time):
             millis = get_millis()
 
             if (map_steps + 11) < len(state.map_selected):
