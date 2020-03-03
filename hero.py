@@ -304,7 +304,6 @@ while True:
         if (get_millis() - millis) >= (game_time - diff_time):
             millis = get_millis()
             preview_song_music(map_name)
-        menu = False
     # In game
     else:
         # Check if the led matrix should move a step
