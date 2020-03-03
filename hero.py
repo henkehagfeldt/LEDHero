@@ -295,7 +295,7 @@ def x_to_color(x):
 def draw(fig):
     figure = FIGURES[fig]
     for x in range(0, 5):
-        for y in range(10, 0):
+        for y in range(10, 0, -1):
             lt.set_pixel_clr(x, y, x_to_color(figure[y][x]))
     
 
