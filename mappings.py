@@ -20,7 +20,7 @@ def get_map_list():
 
 maps = {
     'bells': {
-        'hitmap': {[
+        'hitmap': [
             [0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0],
