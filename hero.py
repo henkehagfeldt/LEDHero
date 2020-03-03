@@ -348,10 +348,10 @@ class guitarThread(threading.Thread):
                         # New strum from neutral
                         if state.strum_state == 0:
                             state.strum_state = 1
-                            if not state.menu:
+                            if not state.menu and not state.done:
                                 # Check for a hit if playing a song
                                 checkForHit()
-                            else:
+                            elif state.menu:
                                 # Switch song preview if in menu
                                 change_preview(event.value)
 
