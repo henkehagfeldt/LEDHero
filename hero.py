@@ -111,11 +111,11 @@ def keys_to_tones(keys):
     # Converts Dict values to binary strings
     # Then converts to corresponding tone e.g 'f'
     binary_keys = ""
-    binary_keys += str(int(state.COLOR_KEYS[str(KEY_GREEN)])) 
-    binary_keys += str(int(state.COLOR_KEYS[str(KEY_RED)])) 
-    binary_keys += str(int(state.COLOR_KEYS[str(KEY_YELLOW)])) 
-    binary_keys += str(int(state.COLOR_KEYS[str(KEY_BLUE)])) 
-    binary_keys += str(int(state.COLOR_KEYS[str(KEY_ORANGE)])) 
+    binary_keys += str(int(keys[str(KEY_GREEN)])) 
+    binary_keys += str(int(keys[str(KEY_RED)])) 
+    binary_keys += str(int(keys[str(KEY_YELLOW)])) 
+    binary_keys += str(int(keys[str(KEY_BLUE)])) 
+    binary_keys += str(int(keys[str(KEY_ORANGE)])) 
     
     return KEY_TONES[binary_keys]
 
@@ -293,7 +293,7 @@ g_thread.start()
 
 millis = get_millis()
 led_millis = get_millis()
-led_time = 40
+led_time = 200
 game_time = 400
 diff_time = 20
 menu = True
