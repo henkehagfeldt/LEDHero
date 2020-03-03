@@ -9,6 +9,7 @@ from evdev import *
 import subprocess
 import asyncio
 import threading
+import math
 
 #guitar = InputDevice('/dev/input/event0')
 lt.init_matrix()
@@ -326,8 +327,9 @@ def change_preview(direction):
     
 def show_score(score):
     for x in range(0, 5):
-        lower = 0
-        s = state.score % (10**(x+1)) - lower
+        s = state.score % (10**(x+1))
+        s = math.floor(s / (10**(x+1)))
+
         for y in range(0, 10):
             # 123
             if(s > (y + 1)):
@@ -361,7 +363,9 @@ while True:
             preview_song_music(state.map_name)
     # In game
     elif state.done:
-        show_score(state.score)
+        if (get_millis() - led_millis) >= led_time:
+            led_millis = get_millis()
+            show_score(state.score)
     else:
         # Check if the led matrix should move a step
         if map_update:
