@@ -29,7 +29,7 @@ def init_tones():
 def play_tone(tone):
     print("Play sound")
     if tone in midi_tones:
-        midi_tones[tone].play(loops=1, maxtime=1000,fade_ms=200)
+        midi_tones[tone].play(loops=-1, maxtime=1000,fade_ms=200)
         midi_tones[tone].fadeout(1600)
         
     
@@ -41,5 +41,4 @@ def stop_tone(tone):
         print(e) 
 
 def play_miss():
-    midi_tones['miss'].play(loops=1, maxtime=1000,fade_ms=200)
-    midi_tones['miss'].fadeout(1600)
+    midi_tones['miss'].play(loops=1, maxtime=1000)
