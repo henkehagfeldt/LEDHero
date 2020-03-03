@@ -98,3 +98,9 @@ def button_pixel_off(x):
 
 def write_leds():
     pixels.show()
+
+def hit_led(x):
+    set_pixel_clr(x, 0, WS_GREEN)
+
+def miss_led(x):
+    set_pixel_clr(x, 0, WS_RED)

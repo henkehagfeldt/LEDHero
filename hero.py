@@ -189,9 +189,13 @@ def checkForHit():
         if map_selected[map_steps + 2][x] > 0 and not v:
             # Note missed
             hit = False
+            lt.miss_led(x)
         elif not map_selected[map_steps + 2][x] > 0 and v:
             # Hit nothing
             hit = False
+            lt.miss_led(x)
+        elif map_selected[map_steps + 2][x] > 0 and v:
+            lt.hit_led(x)
 
     if hit:
         state.current_sound = play_tones(state.COLOR_KEYS)
