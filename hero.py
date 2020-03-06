@@ -21,7 +21,7 @@ KEY_RED = 306
 KEY_YELLOW = 304
 KEY_BLUE = 307
 KEY_ORANGE = 308
-KEY_SELECT = 0
+KEY_SELECT = 313
 
 VALID_KEYS = {KEY_STRUM, KEY_GREEN, KEY_RED, KEY_YELLOW, KEY_BLUE, KEY_ORANGE, KEY_SELECT}
 KEY_TONES = {
@@ -358,7 +358,6 @@ class guitarThread(threading.Thread):
         guitar = InputDevice('/dev/input/event0')
 
         for event in guitar.read_loop():
-            print(event.code)
             if event.type == ecodes.EV_KEY or event.type == 3:
 
                 # Key active
