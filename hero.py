@@ -414,7 +414,7 @@ class guitarThread(threading.Thread):
                                 if(len(state.history) > state.history_index):
                                     state.history[state.history_index] = keys_to_x(state.COLOR_KEYS)
                                 else:
-                                    state.hitstory.append(keys_to_x(state.COLOR_KEYS))
+                                    state.history.append(keys_to_x(state.COLOR_KEYS))
                                 state.history_index = (state.history_index + 1) % 8
                                 play_tones(state.COLOR_KEYS)
 
