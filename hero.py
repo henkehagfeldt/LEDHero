@@ -425,6 +425,7 @@ def game_on():
     if state.map_name == 'pause':
         return
     elif state.map_name == 'freeplay':
+        state.menu = False
         state.freeplay = True
     else:
         # Clear all LEDs
