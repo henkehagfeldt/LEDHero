@@ -466,6 +466,8 @@ def preview_song_leds(song):
         for x in range(0,5):
             for y in range(0,10):
                 lt.set_pixel_clr(x, y, 'rainbow')
+    elif song == "freeplay":
+        draw('freeplay')
     else:
         draw(str(map_list.index(song)+1))
 
