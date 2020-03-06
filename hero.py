@@ -527,6 +527,7 @@ while True:
             show_score(state.score)
     elif state.freeplay:
         # Set the LEDs for which buttons are pressed
+        lt.clear()
         set_button_leds()
     else:
         # Check if the led matrix should move a step
