@@ -525,7 +525,8 @@ while True:
             state.led_millis = get_millis()
             show_score(state.score)
     elif state.freeplay:
-
+        # Set the LEDs for which buttons are pressed
+        set_button_leds()
     else:
         # Check if the led matrix should move a step
         if map_update:
