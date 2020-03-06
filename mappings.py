@@ -18,7 +18,6 @@ def get_map_list():
         if k != "pause":
             map_list.append(k)
     map_list.sort()
-    map_list.append('pause')
     return map_list
 
 maps = {

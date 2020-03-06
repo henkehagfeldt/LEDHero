@@ -21,8 +21,9 @@ KEY_RED = 306
 KEY_YELLOW = 304
 KEY_BLUE = 307
 KEY_ORANGE = 308
+KEY_SELECT = 0
 
-VALID_KEYS = {KEY_STRUM, KEY_GREEN, KEY_RED, KEY_YELLOW, KEY_BLUE, KEY_ORANGE}
+VALID_KEYS = {KEY_STRUM, KEY_GREEN, KEY_RED, KEY_YELLOW, KEY_BLUE, KEY_ORANGE, KEY_SELECT}
 KEY_TONES = {
     '00000': 'notone',
     '00001': 'a',
@@ -100,6 +101,18 @@ FIGURES = {
         [0, 6, 6, 6, 0],
         [0, 0, 0, 0, 0]
         ],
+    'freeplay': [
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 6, 6, 6, 0],
+        [0, 6, 0, 0, 0],
+        [0, 6, 0, 0, 0],
+        [0, 6, 6, 6, 0],
+        [0, 6, 0, 0, 0],
+        [0, 6, 0, 0, 0],
+        [0, 6, 0, 0, 0],
+        [0, 0, 0, 0, 0]
+        ],
     'cross': [
         [0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0],
@@ -142,6 +155,8 @@ PUSHED_KEYS = {}
 PLAYING_SOUNDS = {}
 current_sound = None
 map_list = mappings.get_map_list()
+map_list.append('pause')
+map_list.append('freeplay')
 
 map_steps = 0
 map_update = True
@@ -343,6 +358,7 @@ class guitarThread(threading.Thread):
         guitar = InputDevice('/dev/input/event0')
 
         for event in guitar.read_loop():
+            print(event.code)
             if event.type == ecodes.EV_KEY or event.type == 3:
 
                 # Key active
@@ -378,16 +394,25 @@ class guitarThread(threading.Thread):
                         # New strum from neutral
                         if state.strum_state == 0:
                             state.strum_state = 1
-                            if not state.menu and not state.done:
+                            if not state.menu and not state.done and not state.freeplay:
                                 # Check for a hit if playing a song
                                 checkForHit()
                             elif state.menu:
                                 # Switch song preview if in menu
                                 change_preview(event.value)
+                            elif state.freeplay:
+                                play_tones(state.COLOR_KEYS)
 
                         # Still strumming from last cycle
                         elif state.strum_state == 1:
                             state.strum_state = 2
+                    
+                    # Select button
+                    if event.code == KEY_SELECT:
+                        if state.freeplay:
+                            lt.clear()
+                            state.freeplay = False
+                            state.menu = True
 
                 # Key inactive
                 else:
@@ -400,12 +425,14 @@ def game_on():
 
     if state.map_name == 'pause':
         return
-    
-    # Clear all LEDs
-    lt.clear()
+    elif state.map_name == 'freeplay':
+        state.freeplay = True
+    else:
+        # Clear all LEDs
+        lt.clear()
 
-    # Disable menu mode
-    state.menu = False
+        # Disable menu mode
+        state.menu = False
 
 def get_millis():
     return int(round(time.time() * 1000))
@@ -497,6 +524,8 @@ while True:
         if (get_millis() - state.led_millis) >= led_time:
             state.led_millis = get_millis()
             show_score(state.score)
+    elif state.freeplay:
+
     else:
         # Check if the led matrix should move a step
         if map_update:
