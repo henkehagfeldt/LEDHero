@@ -16,6 +16,7 @@ def get_map_list():
     map_list = []
     for k in maps.keys():
         map_list.append(k)
+    map_list.sort()
     return map_list
 
 maps = {

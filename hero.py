@@ -73,6 +73,40 @@ MAP_COLORS = {
 }
 
 FIGURES = {
+    '1': [
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 1, 0, 0],
+        [0, 1, 1, 0, 0],
+        [0, 0, 1, 0, 0],
+        [0, 0, 1, 0, 0],
+        [0, 0, 1, 0, 0],
+        [0, 1, 1, 1, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0]],
+    '2': [
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 2, 0, 0],
+        [0, 2, 0, 2, 0],
+        [0, 0, 2, 0, 0],
+        [0, 2, 0, 0, 0],
+        [0, 2, 2, 2, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0]],
+    '3': [
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 3, 0, 0],
+        [0, 3, 0, 3, 0],
+        [0, 0, 0, 3, 0],
+        [0, 0, 3, 0, 0],
+        [0, 0, 0, 3, 0],
+        [0, 3, 0, 3, 0],
+        [0, 0, 3, 0, 0],
+        [0, 0, 0, 0, 0]
+        ],
     'cross': [
         [0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0],
@@ -303,7 +337,6 @@ def draw(fig):
         for y in range(0, 10):
             lt.set_pixel_clr(x, y, x_to_color(figure[9-y][x]))
     
-
 class guitarThread(threading.Thread):
 
     def __init__(self, threadID, name):
@@ -412,7 +445,8 @@ def preview_song_music(song):
 def preview_song_leds(song):
     for x in range(0,5):
         for y in range(0,10):
-            lt.set_pixel_clr(x, y, MAP_COLORS[song])
+            draw(str(map_list.index(song)+1))
+            #lt.set_pixel_clr(x, y, MAP_COLORS[song])
 
 def change_preview(direction):
     if(direction == 1):
