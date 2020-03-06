@@ -516,7 +516,7 @@ def freeplay_history():
     for x in range(0, 5):
         for y in range(len(state.history)-1, -1, -1):
             if state.history[y][x]:
-                lt.set_pixel_clr(x, y)
+                lt.set_pixel(x, y)
 
 g_thread = guitarThread(1, "Thread-1")
 g_thread.daemon = True
