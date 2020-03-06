@@ -513,6 +513,9 @@ def show_score(score):
                 lt.set_pixel_clr(x, y, 'rainbow')
 
 def freeplay_history():
+    if len(state.history_index == 0):
+        return
+
     for x in range(0, 5):
         for y in range(1, 10):
             if state.history[(state.history_index + y) % len(state.history)][x]:
