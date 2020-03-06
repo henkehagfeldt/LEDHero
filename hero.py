@@ -65,13 +65,6 @@ KEY_TONES = {
     '11111': 'g#'
 }
 
-MAP_COLORS = {
-    'weird': lt.WS_ORANGE,
-    'star': lt.WS_GREEN,
-    'bells': lt.WS_RED,
-    'pause': 'rainbow'
-}
-
 FIGURES = {
     '1': [
         [0, 0, 0, 0, 0],
@@ -405,11 +398,9 @@ def game_on():
 
     if state.map_name == 'pause':
         return
-        
+    
     # Clear all LEDs
-    for x in range(0, 5):
-        for y in range(0, 10):
-            lt.set_pixel_clr(x, y, lt.WS_CLEAR)
+    lt.clear()
 
     # Disable menu mode
     state.menu = False
@@ -449,7 +440,6 @@ def preview_song_leds(song):
                 lt.set_pixel_clr(x, y, 'rainbow')
     else:
         draw(str(map_list.index(song)+1))
-            #lt.set_pixel_clr(x, y, MAP_COLORS[song])
 
 def change_preview(direction):
     if(direction == 1):
@@ -463,6 +453,7 @@ def show_score(score):
     actual_score = state.score * 50
     actual_score += state.score*2*(11-state.speed)
 
+    lt.clear()
     for x in range(0, 5):
         # state.score = 123
         s = actual_score % (10**(x+1))

@@ -109,3 +109,8 @@ def miss_led(x):
 def clear_hits():
     for x in range(0, 5):
         set_pixel_clr(x, 0, WS_CLEAR)
+
+def clear():
+    for x in range(0, 5):
+        for y in range(0, 10):
+            set_pixel_clr(x, y, WS_CLEAR)
