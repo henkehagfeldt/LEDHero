@@ -514,7 +514,7 @@ def show_score(score):
 
 def freeplay_history():
     for x in range(0, 5):
-        for y in range(0, 8):
+        for y in range(0, len(state.history)):
             if state.history[y][x]:
                 lt.set_pixel_clr(x, y)
 
