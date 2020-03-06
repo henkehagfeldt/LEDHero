@@ -515,7 +515,7 @@ def show_score(score):
 def freeplay_history():
     for x in range(0, 5):
         for y in range(len(state.history)-1, -1, -1):
-            if state.history[y][x]:
+            if state.history[(state.history_index + y) % len(state.history)][x]:
                 lt.set_pixel(x, y)
 
 g_thread = guitarThread(1, "Thread-1")
@@ -549,6 +549,7 @@ while True:
             show_score(state.score)
     elif state.freeplay:
         # Set the LEDs for which buttons are pressed
+        lt.clear()
         freeplay_history()
         set_button_leds()
     else:
