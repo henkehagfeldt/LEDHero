@@ -186,6 +186,8 @@ class state(object):
     speed = 5
     game_speed = 400
     led_millis = 0
+    history = []
+    history_index = 0 
 
 
 def play_tones(color_keys):
@@ -264,6 +266,15 @@ def key_to_x(key):
         return 4
     else:
         return -1
+
+def keys_to_x(keys):
+    xs = []
+    xs.append(keys[str(KEY_GREEN)])
+    xs.append(keys[str(KEY_RED)])
+    xs.append(keys[str(KEY_YELLOW)])
+    xs.append(keys[str(KEY_BLUE)])
+    xs.append(keys[str(KEY_ORANGE)])
+    return xs
 
 def smart_led_update():
     print("I'm Better, hopefully")
@@ -400,6 +411,11 @@ class guitarThread(threading.Thread):
                                 # Switch song preview if in menu
                                 change_preview(event.value)
                             elif state.freeplay:
+                                if(len(state.history) > state.history_index):
+                                    state.history[state.history_index] = keys_to_x(state.COLOR_KEYS)
+                                else:
+                                    state.hitstory.append(keys_to_x(state.COLOR_KEYS))
+                                state.history_index = (state.history_index + 1) % 8
                                 play_tones(state.COLOR_KEYS)
 
                         # Still strumming from last cycle
@@ -496,7 +512,12 @@ def show_score(score):
             if(s >= (y + 1)):
                 lt.set_pixel_clr(x, y, 'rainbow')
 
-            
+def freeplay_history():
+    for x in range(0, 5):
+        for y in range(0, 8):
+            if state.history[y][x]:
+                lt.set_pixel_clr(x, y)
+
 g_thread = guitarThread(1, "Thread-1")
 g_thread.daemon = True
 
@@ -528,7 +549,7 @@ while True:
             show_score(state.score)
     elif state.freeplay:
         # Set the LEDs for which buttons are pressed
-        lt.clear()
+        freeplay_history()
         set_button_leds()
     else:
         # Check if the led matrix should move a step
