@@ -443,9 +443,12 @@ def preview_song_music(song):
     play_tones(fake_keys)
 
 def preview_song_leds(song):
-    for x in range(0,5):
-        for y in range(0,10):
-            draw(str(map_list.index(song)+1))
+    if song == "pause":
+        for x in range(0,5):
+            for y in range(0,10):
+                lt.set_pixel_clr(x, y, 'rainbow')
+    else:
+        draw(str(map_list.index(song)+1))
             #lt.set_pixel_clr(x, y, MAP_COLORS[song])
 
 def change_preview(direction):

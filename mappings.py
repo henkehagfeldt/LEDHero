@@ -15,8 +15,10 @@ def get_map(x):
 def get_map_list():
     map_list = []
     for k in maps.keys():
-        map_list.append(k)
+        if k != "pause":
+            map_list.append(k)
     map_list.sort()
+    map_list.append('pause')
     return map_list
 
 maps = {
