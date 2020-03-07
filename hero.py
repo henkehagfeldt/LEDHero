@@ -188,6 +188,7 @@ class state(object):
     led_millis = 0
     history = []
     history_index = 0 
+    freeplay = False
 
 
 def play_tones(color_keys):
