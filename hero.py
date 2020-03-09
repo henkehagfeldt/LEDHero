@@ -521,6 +521,7 @@ def freeplay_history():
         for y in range(2, 10):
             if (y - 2) < len(state.history):
                 print("y: "+str(y))
+                print("hi: "+str(state.history_index))
                 if state.history[((state.history_index - 1) - (y - 2)) % 8][x]:
                     lt.set_pixel(x, y)
 
