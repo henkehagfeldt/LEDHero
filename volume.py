@@ -15,6 +15,6 @@ while True:
         volume = (volume + 10) % 110
         if volume > 100:
             volume = 100
-        call(["/usr/bin/amixer", "set", "PCM", str(volume)+"%"])
+        call(["/usr/bin/amixer", "set", "Master", str(volume)+"%"])
         print("Setting volume to: "+str(volume))
         time.sleep(0.2)
