@@ -518,9 +518,10 @@ def freeplay_history():
         return
 
     for x in range(0, 5):
-        for y in range(1, 10):
-            if state.history[(state.history_index + y) % len(state.history)][x]:
-                lt.set_pixel(x, y)
+        for y in range(2, 10):
+            if (y - 2) < len(state.history):
+                if state.history[(state.history_index + (y-2)) % 8][x]:
+                    lt.set_pixel(x, y)
 
 g_thread = guitarThread(1, "Thread-1")
 g_thread.daemon = True
