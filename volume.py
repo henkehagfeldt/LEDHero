@@ -13,7 +13,7 @@ while True:
     state = GPIO.input(volume_pin) == False
     if state:
         volume = mixer.getvolume()[0]
-        volume = (volume + 10) % 110
+        volume = (volume + 10) % 101
         mixer.setvolume(volume)
         print("Setting volume to: "+str(volume))
         time.sleep(0.2)
