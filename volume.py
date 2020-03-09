@@ -16,4 +16,4 @@ while True:
         volume = (volume + 10) % 110
         mixer.setvolume(volume)
         print("Setting volume to: "+str(volume))
-        time.sleep(0.5)
+        time.sleep(0.2)
