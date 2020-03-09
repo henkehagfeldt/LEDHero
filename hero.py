@@ -444,6 +444,10 @@ def game_on():
     elif state.map_name == 'freeplay':
         state.menu = False
         state.freeplay = True
+        state.history_index = 0
+        state.history = []
+        # Clear all LEDs
+        lt.clear()
     else:
         # Clear all LEDs
         lt.clear()
